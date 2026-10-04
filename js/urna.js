@@ -457,7 +457,7 @@ class UrnaController {
         }
     }
 
-    evaluateEnteredDigits() {
+    async evaluateEnteredDigits() {
         const cargo = window.CARGOS_ELEICAO_2026[this.currentCargoIndex];
         const len = this.enteredDigits.length;
 
@@ -473,6 +473,15 @@ class UrnaController {
 
         // Quando atinge a quantidade total de dígitos do cargo
         if (len === cargo.digitos) {
+            const csvLoaded = await window.candidatosCSVReady;
+            if (!csvLoaded) {
+                this.showSpecialState(
+                    'DADOS INDISPONÍVEIS',
+                    'Não foi possível carregar os candidatos. Abra a urna por um servidor local.'
+                );
+                return;
+            }
+
             const candidato = window.findCandidato(cargo.id, this.enteredDigits);
 
             // Verificação especial de Senador: 2ª vaga não pode ser o mesmo candidato da 1ª vaga

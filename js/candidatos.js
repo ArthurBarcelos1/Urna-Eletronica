@@ -523,15 +523,18 @@ function parseCandidatosCSV(csvText) {
 async function autoLoadCandidatosCSV() {
     try {
         const res = await fetch('carregamento/candidatos.csv');
-        if (res.ok) {
-            const csvData = await res.text();
-            parseCandidatosCSV(csvData);
+        if (!res.ok) {
+            throw new Error(`Falha ao carregar o CSV de candidatos: HTTP ${res.status}`);
         }
-    } catch (e) {
-        console.log('[Carregamento] CSV carregado com dados locais integrados.');
+        const csvData = await res.text();
+        parseCandidatosCSV(csvData);
+        return true;
+    } catch (error) {
+        console.error('[Carregamento] Não foi possível carregar carregamento/candidatos.csv.', error);
+        return false;
     }
 }
-autoLoadCandidatosCSV();
+window.candidatosCSVReady = autoLoadCandidatosCSV();
 
 // Funções auxiliares de busca
 function findCandidato(cargoId, numero) {
@@ -560,4 +563,3 @@ window.CANDIDATOS_DATABASE = CANDIDATOS_DATABASE;
 window.parseCandidatosCSV = parseCandidatosCSV;
 window.findCandidato = findCandidato;
 window.findLegenda = findLegenda;
-
