@@ -1,5 +1,5 @@
 /* ==========================================================================
-   URNA ELETRÔNICA BRASILEIRA 2026 - TERMINAL DO MESÁRIO
+    TERMINAL DE TESTE DA VOTAÇÃO
    Painel de controle com validação de CPF, monitor de etapas, logs e RDV Shuffle
    ========================================================================== */
 
@@ -35,16 +35,6 @@
     display: flex;
     align-items: center;
     gap: 14px;
-}
-
-.mesario-logo-badge {
-    background: #1e3a8a;
-    color: #60a5fa;
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-weight: 800;
-    font-size: 0.95rem;
-    border: 1px solid #2563eb;
 }
 
 .mesario-title-wrap h1 {

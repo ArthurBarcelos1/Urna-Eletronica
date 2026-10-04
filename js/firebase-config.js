@@ -1,6 +1,6 @@
 /**
- * Urna Eletrônica 2026 - Módulo de Sincronização em Tempo Real (Firebase + Fallback Resiliente)
- * Conecta a Urna, o Teclado do Celular e o Terminal do Mesário.
+ * Sincronização em tempo real do modelo de teste (Firebase + fallback local)
+ * Conecta o visor, o teclado e o terminal de teste.
  */
 
 const FIREBASE_CONFIG = {
@@ -192,7 +192,7 @@ function generatePairingCode() {
     return `${part()}-${part()}-${part()}`;
 }
 
-// Algoritmo oficial de validação de CPF (Módulo 11)
+// Validação de CPF pelo algoritmo Módulo 11
 function validarCPF(cpf) {
     if (!cpf) return false;
     cpf = cpf.toString().replace(/[^\d]+/g, '');

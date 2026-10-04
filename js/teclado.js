@@ -1,5 +1,5 @@
 /**
- * Urna Eletrônica Brasileira 2026 - Lógica do Teclado Numérico Mobile (Celular)
+ * Teclado numérico do modelo de teste
  * Teclado físico virtual com feedback háptico, som tátil e pareamento por código ou QR Code
  */
 
@@ -12,6 +12,11 @@ class TecladoController {
     }
 
     init() {
+        document.addEventListener('pointerdown', () => {
+            if (screen.orientation && typeof screen.orientation.lock === 'function') {
+                screen.orientation.lock('landscape').catch(() => {});
+            }
+        }, { once: true, passive: true });
         this.bindDOM();
         this.checkUrlParams();
         this.setupEventListeners();
@@ -188,7 +193,7 @@ class TecladoController {
 
         window.UrnaSync.on(`sessions/${this.sessionId}/status`, (statusData) => {
             if (statusData && (statusData.phoneConnected === false || statusData.resetSecao) && this.isConnected) {
-                alert('Atenção: A seção eleitoral foi encerrada/zerada ou o teclado foi desconectado.');
+                alert('A simulação foi encerrada ou o teclado foi desconectado.');
                 this.desconectarTeclado();
             }
         });

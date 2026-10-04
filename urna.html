@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urna Eletrônica 2026 — Visor Oficial da Justiça Eleitoral</title>
-    <!-- Fonte Oficial Atkinson Hyperlegible -->
+    <title>Visor da Urna — Modelo de Teste</title>
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/urna.css">
     <!-- Firebase App & Realtime Database CDN -->
@@ -17,20 +16,14 @@
     <main class="urna-chassis">
         <!-- Identificação Superior -->
         <header class="urna-top-header">
-            <div class="tse-brand">
-                <div class="tse-coat">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
-                    </svg>
-                </div>
-                <div class="tse-title-box">
-                    <h1>JUSTIÇA ELEITORAL</h1>
-                    <p>Tribunal Superior Eleitoral — Modelo UE2026</p>
+            <div class="urna-brand">
+                <div class="urna-title-box">
+                    <h1>MODELO DE TESTE</h1>
+                    <p>Simulação de votação</p>
                 </div>
             </div>
             <div class="urna-hardware-info">
-                <span>SEÇÃO: 001 | ZONA: 001</span><br>
-                <span>SISTEMA: BIOMÉTRICO 2026</span>
+                <span>AMBIENTE DE TESTE</span>
             </div>
         </header>
 
@@ -153,14 +146,14 @@
                             <!-- Fotos: Candidato + Vices/Suplentes -->
                             <div class="candidate-photos-area">
                                 <div class="photo-card-main">
-                                    <img id="candidateMainPhoto" src="" alt="Foto Oficial do Candidato">
+                                    <img id="candidateMainPhoto" src="" alt="Imagem do modelo de teste">
                                     <div class="photo-badge-label">TITULAR</div>
                                 </div>
 
                                 <div class="secondary-photos-grid">
                                     <!-- Foto Vice -->
                                     <div class="photo-card-small" id="vicePhotoCard" style="display: none;">
-                                        <img id="vicePhoto" src="" alt="Foto Oficial do Vice">
+                                        <img id="vicePhoto" src="" alt="Imagem do vice de teste">
                                         <div class="photo-badge-label">VICE</div>
                                     </div>
                                     <!-- Foto Suplente 1 -->
@@ -188,23 +181,6 @@
                             CONFIRA O SEU VOTO
                         </div>
 
-                        <!-- 22. Componente de Libras oficial -->
-                        <div class="libras-container" aria-label="Acessibilidade em Libras">
-                            <div class="libras-header">LIBRAS</div>
-                            <div class="libras-canvas-box">
-                                <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="50" cy="30" r="16" fill="#38bdf8"/>
-                                    <rect x="36" y="50" width="28" height="42" rx="6" fill="#0284c7"/>
-                                    <!-- Braços animados em Libras -->
-                                    <path d="M 36 58 Q 20 75 30 92" stroke="#38bdf8" stroke-width="6" fill="none" stroke-linecap="round"/>
-                                    <path d="M 64 58 Q 80 75 70 92" stroke="#38bdf8" stroke-width="6" fill="none" stroke-linecap="round"/>
-                                    <!-- Mãos sinalizando -->
-                                    <circle cx="30" cy="94" r="5" fill="#facc15"/>
-                                    <circle cx="70" cy="94" r="5" fill="#facc15"/>
-                                </svg>
-                            </div>
-                            <div class="libras-sign-caption" id="librasCaption">Deputado Federal</div>
-                        </div>
                     </div>
 
                     <!-- Rodapé de Instruções Oficiais -->
@@ -213,7 +189,7 @@
                             Aperte a tecla: <span class="key-green">VERDE</span> para CONFIRMAR este voto | <span class="key-orange">LARANJA</span> para REINICIAR este voto
                         </div>
                         <div style="font-size: 0.75rem; font-weight: 700; color: #64748b;">
-                            ELEIÇÕES 2026
+                            MODELO DE TESTE
                         </div>
                     </footer>
                 </div>
@@ -228,12 +204,12 @@
                 <!-- 4. TELA DE SEÇÃO ELEITORAL ENCERRADA -->
                 <div class="screen-fim-container" id="secaoEncerradaScreen" style="display: none; background: #0f172a; color: #f8fafc; text-align: center; gap: 16px; padding: 30px;">
                     <div style="font-size: 3.5rem;">🔒</div>
-                    <h1 style="font-size: 2.6rem; font-weight: 900; color: #38bdf8; letter-spacing: -0.01em;">SEÇÃO ELEITORAL ENCERRADA</h1>
+                    <h1 style="font-size: 2.6rem; font-weight: 900; color: #38bdf8; letter-spacing: -0.01em;">TESTE ENCERRADO</h1>
                     <div style="background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e; color: #4ade80; padding: 10px 24px; border-radius: 8px; font-weight: 800; font-size: 1.15rem;">
                         TODOS OS VOTOS FORAM GRAVADOS COM SUCESSO
                     </div>
                     <p style="font-size: 1.05rem; color: #94a3b8; font-weight: 600; max-width: 550px;">
-                        A votação desta seção foi concluída. Aguarde a emissão da zerésima ou reinicialização pelo terminal do mesário.
+                        A simulação foi concluída. Reinicie pelo terminal de teste para começar novamente.
                     </p>
                 </div>
 

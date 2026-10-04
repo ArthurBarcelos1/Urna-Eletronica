@@ -1,7 +1,7 @@
 /**
- * Urna Eletrônica 2026 - Módulo de Áudio e Acessibilidade Sonora
+ * Áudio e acessibilidade sonora do modelo de teste
  * Reproduz com precisão os bips de teclas, confirmação e o clássico som "PILILI" de finalização,
- * utilizando Web Audio API para latência zero e fidelidade acústica militar/eleitoral.
+ * usando Web Audio API para gerar sons e leitura por voz.
  * Também suporta síntese de voz para eleitores com deficiência visual.
  */
 
@@ -110,8 +110,7 @@ class UrnaAudio {
     }
 
     /**
-     * O lendário som "PILILI" oficial da Urna Eletrônica Brasileira
-     * Sequência acústica fiel que toca ao encerrar a votação após o último cargo.
+    * Som de finalização da simulação, executado após o último cargo.
      */
     playPilili(onComplete) {
         if (!this.soundEnabled) {
@@ -126,8 +125,7 @@ class UrnaAudio {
 
         const now = this.ctx.currentTime;
         
-        // Sequência tonal do PILILI da urna brasileira
-        // Bips rápidos em escala ascendente seguidos por um tom longo e contínuo
+        // Bips rápidos em escala ascendente seguidos por um tom longo.
         const tones = [
             { freq: 700, start: 0.00, dur: 0.08 },
             { freq: 880, start: 0.10, dur: 0.08 },

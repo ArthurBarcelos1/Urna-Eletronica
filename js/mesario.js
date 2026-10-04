@@ -1,5 +1,5 @@
 /**
- * Urna Eletrônica Brasileira 2026 - Lógica do Terminal do Mesário
+ * Terminal de Teste - Lógica do Painel de Votação
  * Validação estrita de CPF, monitor de etapas da votação, logs e embaralhamento do RDV em tempo real
  */
 
@@ -8,6 +8,7 @@ class MesarioController {
         this.sessionId = null;
         this.currentCpfValid = false;
         this.votosRDV = []; // Lista de votos gravados no Registro Digital do Voto
+        this.processedVoteIds = new Set();
         this.eleitoresHabilitados = 0;
         this.eleitoresVotaram = 0;
         this.currentVotingStep = 0;
@@ -22,7 +23,7 @@ class MesarioController {
         this.setupEventListeners();
         this.loadSampleVoters();
         this.listenUrnaUpdates();
-        this.addLog('Terminal do Mesário inicializado. Sistema pronto para as Eleições 2026.', 'highlight');
+        this.addLog('Terminal de teste inicializado. Ambiente pronto para simulação.', 'highlight');
     }
 
     bindDOM() {
@@ -109,10 +110,10 @@ class MesarioController {
             });
         }
 
-        // Botão Encerrar Seção Eleitoral
+        // Botão para encerrar o teste
         if (this.elements.btnEncerrarSecao) {
             this.elements.btnEncerrarSecao.addEventListener('click', () => {
-                if (confirm('Deseja encerrar definitivamente os trabalhos da Seção Eleitoral 001? Novas votações serão bloqueadas e o Boletim de Urna (BU) será emitido.')) {
+                if (confirm('Deseja encerrar a simulação? Novas votações serão bloqueadas e um relatório de teste será gerado.')) {
                     this.encerrarSecaoEleitoral();
                 }
             });
@@ -141,7 +142,7 @@ class MesarioController {
 
     validateCpfInput(rawDigits) {
         if (this.secaoEncerrada) {
-            this.elements.cpfFeedback.textContent = '🔒 Seção Eleitoral encerrada. Novas votações não permitidas.';
+            this.elements.cpfFeedback.textContent = '🔒 Teste encerrado. Novas votações não permitidas.';
             this.elements.cpfFeedback.className = 'cpf-validation-feedback invalid';
             this.elements.btnLiberar.disabled = true;
             return;
@@ -188,12 +189,12 @@ class MesarioController {
     }
 
     loadSampleVoters() {
-        // CPFs reais matematicamente válidos para facilitar testes do usuário com 1 clique
+        // CPFs válidos de demonstração para facilitar testes com um clique
         const sampleVoters = [
-            { nome: 'Ana Beatriz Souza', cpf: '01234567890' },
-            { nome: 'Carlos Eduardo Mendes', cpf: '71428593000' },
-            { nome: 'Mariana Lima Rocha', cpf: '12345678909' },
-            { nome: 'Rafael Santos Silva', cpf: '21537894002' }
+            { nome: 'Eleitor Teste 01', cpf: '01234567890' },
+            { nome: 'Eleitor Teste 02', cpf: '71428593000' },
+            { nome: 'Eleitor Teste 03', cpf: '12345678909' },
+            { nome: 'Eleitor Teste 04', cpf: '21537894002' }
         ];
 
         if (this.elements.quickVotersList) {
@@ -230,7 +231,7 @@ class MesarioController {
         }
 
         const cpfDigits = this.elements.cpfInput.value.replace(/\D/g, '');
-        // Gera hash cego do CPF para log eleitoral sem violar a privacidade
+        // Gera um hash de demonstração do CPF para o log
         const cpfHash = this.pseudoHash(cpfDigits);
 
         this.eleitoresHabilitados++;
@@ -287,7 +288,7 @@ class MesarioController {
     }
 
     encerrarSecaoEleitoral() {
-        // Se houver votos, gera primeiro o Boletim de Urna (BU) oficial
+        // Se houver votos, gera primeiro o relatório de teste
         const totalVotosAntes = this.votosRDV.length;
         if (totalVotosAntes > 0) {
             this.gerarBoletimDeUrna();
@@ -333,8 +334,8 @@ class MesarioController {
         this.updateTecladoStatus(false);
         this.renderRDVTable();
 
-        // 4. Registra no Log oficial da Seção
-        this.addLog(`[ENCERRAMENTO E ZERÉSIMA] Seção encerrada com ${totalVotosAntes} votos registrados. Todos os contadores, votos e registros foram ZERADOS e limpos!`, 'alert');
+        // 4. Registra no log do teste
+            this.addLog(`[TESTE ENCERRADO] ${totalVotosAntes} registros foram limpos.`, 'alert');
 
         // 5. Envia sinal de Reset para a Urna e para o Teclado
         window.UrnaSync.set(`sessions/${this.sessionId}/status`, {
@@ -466,6 +467,9 @@ class MesarioController {
         // Votação Concluída e Embaralhamento em Tempo Real do RDV
         window.UrnaSync.on(`sessions/${this.sessionId}/vote_completed`, (data) => {
             if (!data || !data.votes) return;
+            const voteId = data.voteId || data.timestamp;
+            if (voteId == null || this.processedVoteIds.has(voteId)) return;
+            this.processedVoteIds.add(voteId);
 
             this.eleitoresVotaram++;
             this.votingActive = false;
@@ -561,12 +565,12 @@ class MesarioController {
 
         let buHtml = `
             <div class="bu-header">
-                <h2>JUSTIÇA ELEITORAL BRASILEIRA</h2>
-                <p>ELEIÇÕES GERAIS DE 2026 - 1º TURNO</p>
-                <p><strong>BOLETIM DE URNA (BU) - OFICIAL</strong></p>
-                <p>MUNICÍPIO: SÃO PAULO | ZONA: 001 | SEÇÃO: 001</p>
+                <h2>RELATÓRIO DE TESTE</h2>
+                <p>SIMULAÇÃO DE VOTAÇÃO</p>
+                <p><strong>REGISTRO DE VOTOS</strong></p>
+                <p>AMBIENTE: TESTE | SEÇÃO: 001</p>
                 <p>DATA DE FECHAMENTO: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
-                <p>ELEITORES APTOS: 500 | COMPARECIMENTO: ${this.eleitoresVotaram}</p>
+                <p>ELEITORES DE TESTE: 500 | VOTOS REGISTRADOS: ${this.eleitoresVotaram}</p>
             </div>
             <div style="margin-top: 15px;">
         `;
@@ -585,15 +589,15 @@ class MesarioController {
 
         buHtml += `
             <div style="margin-top: 20px; border-top: 1px solid #111; padding-top: 10px; font-size: 0.7rem; text-align: center;">
-                <p>ASSINATURA DIGITAL DO REGISTRO DE VOTO:</p>
+                <p>HASH DO REGISTRO DE TESTE:</p>
                 <p style="word-break: break-all; color: #475569;">${this.pseudoHash(JSON.stringify(totals))}</p>
-                <p>URNA MODELO 2026 - SISTEMA AUDITADO</p>
+                <p>MODELO DE TESTE</p>
             </div>
         `;
 
         this.elements.buContent.innerHTML = buHtml;
         this.elements.buModal.style.display = 'flex';
-        this.addLog('[BU EMITIDO] Boletim de Urna impresso e assinado digitalmente.', 'highlight');
+        this.addLog('[RELATÓRIO GERADO] Relatório de teste pronto para impressão.', 'highlight');
     }
 
     pseudoHash(str) {

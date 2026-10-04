@@ -1,6 +1,6 @@
 /**
- * Urna Eletrônica 2026 - Base de Dados de Candidatos Oficiais
- * Ordem oficial das Eleições Gerais de 2026:
+ * Dados de demonstração do modelo de teste
+ * Ordem de exibição dos cargos:
  * 1. Deputado Federal (4 dígitos)
  * 2. Deputado Estadual ou Distrital (5 dígitos)
  * 3. Senador - 1ª vaga (3 dígitos)
@@ -27,10 +27,6 @@ function generateCandidateAvatar(name, gender = 'm', role = 'CANDIDATO', color =
         </defs>
         <rect width="300" height="380" fill="url(#grad)" rx="8"/>
         
-        <!-- Fundo institucional TSE / Selo marca d'água -->
-        <circle cx="150" cy="140" r="85" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
-        <circle cx="150" cy="140" r="70" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="2"/>
-        
         <!-- Silhueta / Busto Eleitoral -->
         <circle cx="150" cy="120" r="52" fill="#e2e8f0" filter="url(#shadow)"/>
         <path d="M 75 270 C 75 195 225 195 225 270 Z" fill="#cbd5e1"/>
@@ -39,12 +35,12 @@ function generateCandidateAvatar(name, gender = 'm', role = 'CANDIDATO', color =
         <!-- Letras Iniciais no Busto -->
         <text x="150" y="132" font-family="Arial, sans-serif" font-size="34" font-weight="900" fill="#1e293b" text-anchor="middle">${initials}</text>
         
-        <!-- Faixa inferior com o nome e justiça eleitoral -->
+        <!-- Faixa inferior do modelo de demonstração -->
         <rect y="295" width="300" height="85" fill="#0f172a" fill-opacity="0.95"/>
         <rect y="292" width="300" height="3" fill="#22c55e"/>
         <text x="150" y="325" font-family="'Atkinson Hyperlegible', Arial, sans-serif" font-size="16" font-weight="700" fill="#f8fafc" text-anchor="middle">${name.toUpperCase()}</text>
-        <text x="150" y="348" font-family="'Atkinson Hyperlegible', Arial, sans-serif" font-size="11" font-weight="600" fill="#94a3b8" letter-spacing="1.5" text-anchor="middle">JUSTIÇA ELEITORAL 2026</text>
-        <text x="150" y="366" font-family="'Atkinson Hyperlegible', Arial, sans-serif" font-size="9" fill="#22c55e" text-anchor="middle">FOTO OFICIAL HOMOLOGADA</text>
+        <text x="150" y="348" font-family="'Atkinson Hyperlegible', Arial, sans-serif" font-size="11" font-weight="600" fill="#94a3b8" letter-spacing="1.5" text-anchor="middle">MODELO DE TESTE</text>
+        <text x="150" y="366" font-family="'Atkinson Hyperlegible', Arial, sans-serif" font-size="9" fill="#22c55e" text-anchor="middle">IMAGEM DE DEMONSTRAÇÃO</text>
     </svg>`;
 }
 
@@ -57,7 +53,6 @@ const CARGOS_ELEICAO_2026 = [
         isProporcional: true,
         suplentes: false,
         vice: false,
-        librasSign: 'Deputado Federal'
     },
     {
         id: 'deputado_estadual',
@@ -67,7 +62,6 @@ const CARGOS_ELEICAO_2026 = [
         isProporcional: true,
         suplentes: false,
         vice: false,
-        librasSign: 'Deputado Estadual'
     },
     {
         id: 'senador_1',
@@ -77,7 +71,6 @@ const CARGOS_ELEICAO_2026 = [
         isProporcional: false,
         suplentes: true,
         vice: false,
-        librasSign: 'Senador 1ª Vaga'
     },
     {
         id: 'senador_2',
@@ -87,7 +80,6 @@ const CARGOS_ELEICAO_2026 = [
         isProporcional: false,
         suplentes: true,
         vice: false,
-        librasSign: 'Senador 2ª Vaga'
     },
     {
         id: 'governador',
@@ -97,7 +89,6 @@ const CARGOS_ELEICAO_2026 = [
         isProporcional: false,
         suplentes: false,
         vice: true,
-        librasSign: 'Governador'
     },
     {
         id: 'presidente',
@@ -107,23 +98,22 @@ const CARGOS_ELEICAO_2026 = [
         isProporcional: false,
         suplentes: false,
         vice: true,
-        librasSign: 'Presidente'
     }
 ];
 
 const PARTIDOS = {
-    '10': { numero: '10', sigla: 'REP', nome: 'Republicanos' },
-    '12': { numero: '12', sigla: 'PDT', nome: 'Partido Democrático Trabalhista' },
-    '13': { numero: '13', sigla: 'PT', nome: 'Partido dos Trabalhadores' },
-    '15': { numero: '15', sigla: 'MDB', nome: 'Movimento Democrático Brasileiro' },
-    '20': { numero: '20', sigla: 'PODE', nome: 'Podemos' },
-    '22': { numero: '22', sigla: 'PL', nome: 'Partido Liberal' },
-    '30': { numero: '30', sigla: 'NOVO', nome: 'Partido Novo' },
-    '40': { numero: '40', sigla: 'PSB', nome: 'Partido Socialista Brasileiro' },
-    '45': { numero: '45', sigla: 'PSDB', nome: 'Partido da Social Democracia Brasileira' },
-    '50': { numero: '50', sigla: 'PSOL', nome: 'Partido Socialismo e Liberdade' },
-    '55': { numero: '55', sigla: 'PSD', nome: 'Partido Social Democrático' },
-    '44': { numero: '44', sigla: 'UNIÃO', nome: 'União Brasil' }
+    '10': { numero: '10', sigla: 'T10', nome: 'Partido Teste 10' },
+    '12': { numero: '12', sigla: 'T12', nome: 'Partido Teste 12' },
+    '13': { numero: '13', sigla: 'T13', nome: 'Partido Teste 13' },
+    '15': { numero: '15', sigla: 'T15', nome: 'Partido Teste 15' },
+    '20': { numero: '20', sigla: 'T20', nome: 'Partido Teste 20' },
+    '22': { numero: '22', sigla: 'T22', nome: 'Partido Teste 22' },
+    '30': { numero: '30', sigla: 'T30', nome: 'Partido Teste 30' },
+    '40': { numero: '40', sigla: 'T40', nome: 'Partido Teste 40' },
+    '45': { numero: '45', sigla: 'T45', nome: 'Partido Teste 45' },
+    '50': { numero: '50', sigla: 'T50', nome: 'Partido Teste 50' },
+    '55': { numero: '55', sigla: 'T55', nome: 'Partido Teste 55' },
+    '44': { numero: '44', sigla: 'T44', nome: 'Partido Teste 44' }
 };
 
 const CANDIDATOS_DATABASE = {
@@ -131,38 +121,38 @@ const CANDIDATOS_DATABASE = {
     'deputado_federal': [
         {
             numero: '1322',
-            nome: 'MARIA SILVA DA ESPERANÇA',
-            partido: 'PARTIDO DOS TRABALHADORES — PT',
+            nome: 'Modelo Teste 01',
+            partido: 'Partido Teste 01',
             legendaNumero: '13',
-            foto: generateCandidateAvatar('Maria Silva da Esperança', 'f')
+            foto: generateCandidateAvatar('Modelo Teste', 'f')
         },
         {
             numero: '2210',
-            nome: 'CARLOS ALBERTO MENEZES',
-            partido: 'PARTIDO LIBERAL — PL',
+            nome: 'Modelo Teste 02',
+            partido: 'Partido Teste 02',
             legendaNumero: '22',
-            foto: generateCandidateAvatar('Carlos Alberto Menezes', 'm')
+            foto: generateCandidateAvatar('Modelo Teste', 'm')
         },
         {
             numero: '4501',
-            nome: 'FERNANDA COSTA BITTENCOURT',
-            partido: 'PARTIDO DA SOCIAL DEMOCRACIA — PSDB',
+            nome: 'Modelo Teste 03',
+            partido: 'Partido Teste 03',
             legendaNumero: '45',
-            foto: generateCandidateAvatar('Fernanda Costa Bittencourt', 'f')
+            foto: generateCandidateAvatar('Modelo Teste', 'f')
         },
         {
             numero: '1515',
-            nome: 'ROBERTO VIANA SANTOS',
-            partido: 'MOVIMENTO DEMOCRÁTICO BRASILEIRO — MDB',
+            nome: 'Modelo Teste 04',
+            partido: 'Partido Teste 04',
             legendaNumero: '15',
-            foto: generateCandidateAvatar('Roberto Viana Santos', 'm')
+            foto: generateCandidateAvatar('Modelo Teste', 'm')
         },
         {
             numero: '5050',
-            nome: 'JULIANA MARTINS FREITAS',
-            partido: 'PARTIDO SOCIALISMO E LIBERDADE — PSOL',
+            nome: 'Modelo Teste 05',
+            partido: 'Partido Teste 05',
             legendaNumero: '50',
-            foto: generateCandidateAvatar('Juliana Martins Freitas', 'f')
+            foto: generateCandidateAvatar('Modelo Teste', 'f')
         }
     ],
 
@@ -170,38 +160,38 @@ const CANDIDATOS_DATABASE = {
     'deputado_estadual': [
         {
             numero: '13123',
-            nome: 'PROFESSOR JOÃO BATISTA',
-            partido: 'PARTIDO DOS TRABALHADORES — PT',
+            nome: 'Modelo Teste 06',
+            partido: 'Partido Teste 01',
             legendaNumero: '13',
-            foto: generateCandidateAvatar('Professor João Batista', 'm')
+            foto: generateCandidateAvatar('Modelo Teste', 'm')
         },
         {
             numero: '22222',
-            nome: 'CORONEL RICARDO LIMA',
-            partido: 'PARTIDO LIBERAL — PL',
+            nome: 'Modelo Teste 07',
+            partido: 'Partido Teste 02',
             legendaNumero: '22',
-            foto: generateCandidateAvatar('Coronel Ricardo Lima', 'm')
+            foto: generateCandidateAvatar('Modelo Teste', 'm')
         },
         {
             numero: '45555',
-            nome: 'DRA. BEATRIZ AZEVEDO',
-            partido: 'PARTIDO DA SOCIAL DEMOCRACIA — PSDB',
+            nome: 'Modelo Teste 08',
+            partido: 'Partido Teste 03',
             legendaNumero: '45',
-            foto: generateCandidateAvatar('Dra. Beatriz Azevedo', 'f')
+            foto: generateCandidateAvatar('Modelo Teste', 'f')
         },
         {
             numero: '15000',
-            nome: 'MARCELO ANDRADE JÚNIOR',
-            partido: 'MOVIMENTO DEMOCRÁTICO BRASILEIRO — MDB',
+            nome: 'Modelo Teste 09',
+            partido: 'Partido Teste 04',
             legendaNumero: '15',
-            foto: generateCandidateAvatar('Marcelo Andrade Júnior', 'm')
+            foto: generateCandidateAvatar('Modelo Teste', 'm')
         },
         {
             numero: '55123',
-            nome: 'LUCIANA PINHEIRO MOURA',
-            partido: 'PARTIDO SOCIAL DEMOCRÁTICO — PSD',
+            nome: 'Modelo Teste 10',
+            partido: 'Partido Teste 05',
             legendaNumero: '55',
-            foto: generateCandidateAvatar('Luciana Pinheiro Moura', 'f')
+            foto: generateCandidateAvatar('Modelo Teste', 'f')
         }
     ],
 
@@ -209,72 +199,72 @@ const CANDIDATOS_DATABASE = {
     'senador': [
         {
             numero: '131',
-            nome: 'PAULO CÉSAR CARDOSO',
-            partido: 'PARTIDO DOS TRABALHADORES — PT',
-            foto: generateCandidateAvatar('Paulo César Cardoso', 'm'),
+            nome: 'Modelo Teste 11',
+            partido: 'Partido Teste 01',
+            foto: generateCandidateAvatar('Modelo Teste', 'm'),
             suplente1: {
-                nome: 'HELENA MATTOS',
-                foto: generateCandidateAvatar('Helena Mattos', 'f')
+                nome: 'Modelo Teste 12',
+                foto: generateCandidateAvatar('Modelo Teste', 'f')
             },
             suplente2: {
-                nome: 'JOSÉ MOREIRA',
-                foto: generateCandidateAvatar('José Moreira', 'm')
+                nome: 'Modelo Teste 13',
+                foto: generateCandidateAvatar('Modelo Teste', 'm')
             }
         },
         {
             numero: '222',
-            nome: 'EDUARDO NOGUEIRA FILHO',
-            partido: 'PARTIDO LIBERAL — PL',
-            foto: generateCandidateAvatar('Eduardo Nogueira Filho', 'm'),
+            nome: 'Modelo Teste 14',
+            partido: 'Partido Teste 02',
+            foto: generateCandidateAvatar('Modelo Teste', 'm'),
             suplente1: {
-                nome: 'ALICE VASCONCELOS',
-                foto: generateCandidateAvatar('Alice Vasconcelos', 'f')
+                nome: 'Modelo Teste 15',
+                foto: generateCandidateAvatar('Modelo Teste', 'f')
             },
             suplente2: {
-                nome: 'GABRIEL TEIXEIRA',
-                foto: generateCandidateAvatar('Gabriel Teixeira', 'm')
+                nome: 'Modelo Teste 16',
+                foto: generateCandidateAvatar('Modelo Teste', 'm')
             }
         },
         {
             numero: '151',
-            nome: 'RENATA SOUZA DIAS',
-            partido: 'MOVIMENTO DEMOCRÁTICO BRASILEIRO — MDB',
-            foto: generateCandidateAvatar('Renata Souza Dias', 'f'),
+            nome: 'Modelo Teste 17',
+            partido: 'Partido Teste 03',
+            foto: generateCandidateAvatar('Modelo Teste', 'f'),
             suplente1: {
-                nome: 'MARCOS ANTÔNIO LEAL',
-                foto: generateCandidateAvatar('Marcos Antônio Leal', 'm')
+                nome: 'Modelo Teste 18',
+                foto: generateCandidateAvatar('Modelo Teste', 'm')
             },
             suplente2: {
-                nome: 'PATRÍCIA NUNES',
-                foto: generateCandidateAvatar('Patrícia Nunes', 'f')
+                nome: 'Modelo Teste 19',
+                foto: generateCandidateAvatar('Modelo Teste', 'f')
             }
         },
         {
             numero: '456',
-            nome: 'ÁLVARO GUIMARÃES PRADO',
-            partido: 'PARTIDO DA SOCIAL DEMOCRACIA — PSDB',
-            foto: generateCandidateAvatar('Álvaro Guimarães Prado', 'm'),
+            nome: 'Modelo Teste 20',
+            partido: 'Partido Teste 04',
+            foto: generateCandidateAvatar('Modelo Teste', 'm'),
             suplente1: {
-                nome: 'SUELI CARVALHO',
-                foto: generateCandidateAvatar('Sueli Carvalho', 'f')
+                nome: 'Modelo Teste 21',
+                foto: generateCandidateAvatar('Modelo Teste', 'f')
             },
             suplente2: {
-                nome: 'BRUNO FONSECA',
-                foto: generateCandidateAvatar('Bruno Fonseca', 'm')
+                nome: 'Modelo Teste 22',
+                foto: generateCandidateAvatar('Modelo Teste', 'm')
             }
         },
         {
             numero: '555',
-            nome: 'CLARA BEATRIZ VASCONCELLOS',
-            partido: 'PARTIDO SOCIAL DEMOCRÁTICO — PSD',
-            foto: generateCandidateAvatar('Clara Beatriz Vasconcellos', 'f'),
+            nome: 'Modelo Teste 23',
+            partido: 'Partido Teste 05',
+            foto: generateCandidateAvatar('Modelo Teste', 'f'),
             suplente1: {
-                nome: 'VITOR HUGO TAVARES',
-                foto: generateCandidateAvatar('Vitor Hugo Tavares', 'm')
+                nome: 'Modelo Teste 24',
+                foto: generateCandidateAvatar('Modelo Teste', 'm')
             },
             suplente2: {
-                nome: 'SOLANGE RIBEIRO',
-                foto: generateCandidateAvatar('Solange Ribeiro', 'f')
+                nome: 'Modelo Teste 25',
+                foto: generateCandidateAvatar('Modelo Teste', 'f')
             }
         }
     ],
@@ -283,42 +273,42 @@ const CANDIDATOS_DATABASE = {
     'governador': [
         {
             numero: '13',
-            nome: 'ANA CLÁUDIA CARVALHO',
-            partido: 'COLIGAÇÃO ESPERANÇA E PROGRESSO (PT / PSB / PCdoB)',
-            foto: generateCandidateAvatar('Ana Cláudia Carvalho', 'f'),
+            nome: 'Modelo Teste 26',
+            partido: 'Partido Teste 01',
+            foto: generateCandidateAvatar('Modelo Teste', 'f'),
             vice: {
-                nome: 'RODRIGO PEIXOTO',
-                foto: generateCandidateAvatar('Rodrigo Peixoto', 'm')
+                nome: 'Modelo Teste 27',
+                foto: generateCandidateAvatar('Modelo Teste', 'm')
             }
         },
         {
             numero: '22',
-            nome: 'GUSTAVO HENRIQUE BARBOSA',
-            partido: 'COLIGAÇÃO ORDEM E CRESCIMENTO (PL / PP / REPUBLICANOS)',
-            foto: generateCandidateAvatar('Gustavo Henrique Barbosa', 'm'),
+            nome: 'Modelo Teste 28',
+            partido: 'Partido Teste 02',
+            foto: generateCandidateAvatar('Modelo Teste', 'm'),
             vice: {
-                nome: 'ADRIANA TOLEDO',
-                foto: generateCandidateAvatar('Adriana Toledo', 'f')
+                nome: 'Modelo Teste 29',
+                foto: generateCandidateAvatar('Modelo Teste', 'f')
             }
         },
         {
             numero: '15',
-            nome: 'HENRIQUE MACEDO JORGE',
-            partido: 'COLIGAÇÃO UNIDOS PELO ESTADO (MDB / UNIÃO)',
-            foto: generateCandidateAvatar('Henrique Macedo Jorge', 'm'),
+            nome: 'Modelo Teste 30',
+            partido: 'Partido Teste 03',
+            foto: generateCandidateAvatar('Modelo Teste', 'm'),
             vice: {
-                nome: 'LÍVIA CASTRO',
-                foto: generateCandidateAvatar('Lívia Castro', 'f')
+                nome: 'Modelo Teste 31',
+                foto: generateCandidateAvatar('Modelo Teste', 'f')
             }
         },
         {
             numero: '45',
-            nome: 'SÉRGIO BRAGANÇA NETO',
-            partido: 'PARTIDO DA SOCIAL DEMOCRACIA BRASILEIRA — PSDB',
-            foto: generateCandidateAvatar('Sérgio Bragança Neto', 'm'),
+            nome: 'Modelo Teste 32',
+            partido: 'Partido Teste 04',
+            foto: generateCandidateAvatar('Modelo Teste', 'm'),
             vice: {
-                nome: 'CARLA NOGUEIRA',
-                foto: generateCandidateAvatar('Carla Nogueira', 'f')
+                nome: 'Modelo Teste 33',
+                foto: generateCandidateAvatar('Modelo Teste', 'f')
             }
         }
     ],
@@ -327,48 +317,70 @@ const CANDIDATOS_DATABASE = {
     'presidente': [
         {
             numero: '13',
-            nome: 'ALEXANDRE DE OLIVEIRA SILVA',
-            partido: 'COLIGAÇÃO BRASIL DO POVO (PT / PSB / PSOL / REDE)',
-            foto: generateCandidateAvatar('Alexandre de Oliveira Silva', 'm'),
+            nome: 'Modelo Teste 34',
+            partido: 'Partido Teste 05',
+            foto: generateCandidateAvatar('Modelo Teste', 'm'),
             vice: {
-                nome: 'BEATRIZ MENDONÇA ARRUDA',
-                foto: generateCandidateAvatar('Beatriz Mendonça Arruda', 'f')
+                nome: 'Modelo Teste 35',
+                foto: generateCandidateAvatar('Modelo Teste', 'f')
             }
         },
         {
             numero: '22',
-            nome: 'WALTER MOURÃO CAVALCANTI',
-            partido: 'COLIGAÇÃO BRASIL LIVRE E SOBERANO (PL / NOVO)',
-            foto: generateCandidateAvatar('Walter Mourão Cavalcanti', 'm'),
+            nome: 'Modelo Teste 36',
+            partido: 'Partido Teste 01',
+            foto: generateCandidateAvatar('Modelo Teste', 'm'),
             vice: {
-                nome: 'LEONARDO BORGES GUEDES',
-                foto: generateCandidateAvatar('Leonardo Borges Guedes', 'm')
+                nome: 'Modelo Teste 37',
+                foto: generateCandidateAvatar('Modelo Teste', 'm')
             }
         },
         {
             numero: '15',
-            nome: 'SIMONE MARQUES TELES',
-            partido: 'COLIGAÇÃO DIÁLOGO E PAZ (MDB / CIDADANIA)',
-            foto: generateCandidateAvatar('Simone Marques Teles', 'f'),
+            nome: 'Modelo Teste 38',
+            partido: 'Partido Teste 02',
+            foto: generateCandidateAvatar('Modelo Teste', 'f'),
             vice: {
-                nome: 'FÁBIO HENRIQUE RESENDE',
-                foto: generateCandidateAvatar('Fábio Henrique Resende', 'm')
+                nome: 'Modelo Teste 39',
+                foto: generateCandidateAvatar('Modelo Teste', 'm')
             }
         },
         {
             numero: '45',
-            nome: 'EDUARDO LEITE MONTEIRO',
-            partido: 'FEDERAÇÃO PSDB E CIDADANIA',
-            foto: generateCandidateAvatar('Eduardo Leite Monteiro', 'm'),
+            nome: 'Modelo Teste 40',
+            partido: 'Partido Teste 03',
+            foto: generateCandidateAvatar('Modelo Teste', 'm'),
             vice: {
-                nome: 'MARIANA SALLES VIEIRA',
-                foto: generateCandidateAvatar('Mariana Salles Vieira', 'f')
+                nome: 'Modelo Teste 41',
+                foto: generateCandidateAvatar('Modelo Teste', 'f')
             }
         }
     ]
 };
 
-// Analisador do Arquivo CSV da Pasta carregamento/
+function applyTestModelNames(database) {
+    let modelNumber = 0;
+    Object.values(database).forEach(candidates => {
+        candidates.forEach(candidate => {
+            modelNumber++;
+            const suffix = String(modelNumber).padStart(2, '0');
+            candidate.nome = `Modelo Teste ${suffix}`;
+            candidate.partido = `Partido Teste ${String((modelNumber % 5) + 1).padStart(2, '0')}`;
+            candidate.foto = generateCandidateAvatar(candidate.nome);
+
+            [['vice', 'Vice'], ['suplente1', 'Suplente 1'], ['suplente2', 'Suplente 2']].forEach(([key, label]) => {
+                if (candidate[key]) {
+                    candidate[key].nome = `Modelo Teste ${suffix} - ${label}`;
+                    candidate[key].foto = generateCandidateAvatar(candidate[key].nome);
+                }
+            });
+        });
+    });
+}
+
+applyTestModelNames(CANDIDATOS_DATABASE);
+
+// Analisador do CSV de candidatos de teste
 function parseCandidatosCSV(csvText) {
     if (!csvText) return;
     const lines = csvText.trim().split(/\r?\n/);
@@ -455,6 +467,7 @@ function parseCandidatosCSV(csvText) {
             CANDIDATOS_DATABASE[k] = newDb[k];
         }
     });
+    applyTestModelNames(CANDIDATOS_DATABASE);
 
     console.log('[Carregamento CSV] Candidatos carregados da pasta carregamento com sucesso!', CANDIDATOS_DATABASE);
 }

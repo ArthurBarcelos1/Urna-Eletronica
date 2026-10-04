@@ -1,12 +1,12 @@
 /* ==========================================================================
-   URNA ELETRÔNICA BRASILEIRA 2026 - ESTILOS GLOBAIS E TIPOGRAFIA OFICIAL
+    SIMULADOR DE VOTAÇÃO - ESTILOS GLOBAIS
    Tipografia: Atkinson Hyperlegible (Google Fonts)
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;600;700&display=swap');
 
 :root {
-    /* Cores da Urna Eletrônica Oficial */
+    /* Cores da interface de teste */
     --urna-bg: #eceae0;
     --urna-panel-bg: #f5f4ed;
     --urna-text-main: #111827;
@@ -62,7 +62,7 @@ body {
     to { opacity: 1; transform: scale(1); }
 }
 
-/* Efeito piscante do "CONFIRA O SEU VOTO" oficial */
+/* Efeito piscante da mensagem de conferência */
 .blink-text {
     animation: blinkAnimation 0.9s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

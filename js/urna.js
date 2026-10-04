@@ -1,6 +1,6 @@
 /**
- * Urna Eletrônica Brasileira 2026 - Lógica da Tela Principal LCD
- * Reprodução fiel da máquina de estados oficial do TSE 2026
+ * Controle do visor LCD do modelo de teste
+ * Gerencia as etapas da simulação de votação
  */
 
 class UrnaController {
@@ -87,8 +87,6 @@ class UrnaController {
             // Confirmação
             confiraVotoBanner: document.getElementById('confiraVotoBanner'),
             
-            // Libras
-            librasCaption: document.getElementById('librasCaption')
         };
 
         // Permite ao usuário definir o IP da máquina na rede local caso queira ler com a câmera nativa do celular
@@ -242,9 +240,9 @@ class UrnaController {
                 }
             }
 
-            // Comando do Mesário para Encerrar Seção (não zera, trava com mensagem oficial)
+            // Comando do terminal de teste para encerrar a simulação
             if (statusData.secaoEncerrada) {
-                console.log('[Urna] Seção encerrada oficialmente pelo Mesário.');
+                console.log('[Urna] Simulação encerrada pelo terminal de teste.');
                 this.setUrnaState('SECAO_ENCERRADA');
             }
 
@@ -353,23 +351,20 @@ class UrnaController {
             return;
         }
 
-        // Atualiza timeline de 2026
+        // Atualiza a linha do tempo da simulação
         this.updateTimeline(cargoIndex);
 
         // Atualiza Título do Cargo
         this.elements.roleTitle.textContent = cargo.nome;
         this.elements.roleSubtitle.textContent = `Cargo ${cargoIndex + 1} de 6`;
 
-        // Monta caixas de dígitos de acordo com a quantidade oficial de dígitos
+        // Monta as caixas de acordo com a quantidade de dígitos do cargo
         this.renderDigitBoxes(cargo.digitos);
 
         // Limpa visualização de candidato
         this.hideCandidateInfo();
         this.hideSpecialState();
         this.elements.confiraVotoBanner.style.display = 'none';
-
-        // Atualiza Libras
-        this.updateLibras(cargo.nome);
 
         // Acessibilidade por voz
         window.urnaAudio.speak(cargo.nome);
@@ -552,7 +547,6 @@ class UrnaController {
         }
 
         window.urnaAudio.speak(candidato.nome);
-        this.updateLibras(candidato.nome);
     }
 
     showLegendaInfo(legenda) {
@@ -576,7 +570,6 @@ class UrnaController {
         this.updateDigitBoxes();
         this.hideCandidateInfo();
         this.showSpecialState('VOTO EM BRANCO', 'Aperte VERDE para confirmar ou LARANJA para reiniciar');
-        this.updateLibras('Voto em Branco');
         window.urnaAudio.speak('Voto em branco');
         this.startConfiraVotoTimer();
     }
@@ -610,7 +603,6 @@ class UrnaController {
         this.elements.confiraVotoBanner.style.display = 'none';
         
         const cargo = window.CARGOS_ELEICAO_2026[this.currentCargoIndex];
-        this.updateLibras(cargo.nome);
     }
 
     /**
@@ -624,7 +616,7 @@ class UrnaController {
         
         if (this.confirmTimer) clearTimeout(this.confirmTimer);
         
-        // Pausa obrigatória de 1.2 segundos da legislação 2026
+        // Pausa de conferência antes de liberar a confirmação
         this.confirmTimer = setTimeout(() => {
             this.canConfirm = true;
             this.elements.confiraVotoBanner.classList.remove('blink-text');
@@ -680,7 +672,6 @@ class UrnaController {
      */
     finishVoting() {
         this.setUrnaState('FINISHED');
-        this.updateLibras('Votação Concluída');
         window.urnaAudio.speak('Fim da votação');
 
         // Notifica Mesário
@@ -693,6 +684,7 @@ class UrnaController {
         // Envia votos registrados para o RDV (Registro Digital do Voto) para embaralhamento
         window.UrnaSync.set(`sessions/${this.sessionId}/vote_completed`, {
             votes: this.currentSessionVotes,
+            voteId: `${Date.now()}_${Math.random().toString(36).substring(2, 10)}`,
             timestamp: Date.now()
         });
 
@@ -710,11 +702,6 @@ class UrnaController {
         });
     }
 
-    updateLibras(captionText) {
-        if (this.elements.librasCaption) {
-            this.elements.librasCaption.textContent = captionText;
-        }
-    }
 }
 
 // Inicializa a Urna quando a página carregar

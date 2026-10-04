@@ -1,16 +1,16 @@
 /* ==========================================================================
-   URNA ELETRÔNICA BRASILEIRA 2026 - TELA LCD DO TERMINAL DO ELEITOR
-   Fidelidade oficial de acordo com as especificações do TSE 2026
+    VISOR DA URNA - MODELO DE TESTE
    ========================================================================== */
 
 .urna-screen-body {
     background: radial-gradient(circle at 50% 30%, #1e293b 0%, #090d16 100%);
-    min-height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 12px;
+    overflow: hidden;
     font-family: var(--font-official);
 }
 
@@ -18,16 +18,21 @@
 .urna-chassis {
     width: 100%;
     max-width: 1060px;
+    height: min(920px, calc(100dvh - 24px));
     background: linear-gradient(145deg, #d8d6cb 0%, #c5c3b6 100%);
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), inset 0 2px 4px rgba(255, 255, 255, 0.6);
     border: 4px solid #a8a699;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 /* Identificação superior da carcaça */
 .urna-top-header {
+    flex: 0 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -35,24 +40,13 @@
     padding: 0 10px;
 }
 
-.tse-brand {
+.urna-brand {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.tse-coat {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: #0f172a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
-
-.tse-title-box h1 {
+.urna-title-box h1 {
     font-size: 1.25rem;
     font-weight: 700;
     color: #1f2937;
@@ -60,7 +54,7 @@
     letter-spacing: -0.01em;
 }
 
-.tse-title-box p {
+.urna-title-box p {
     font-size: 0.8rem;
     color: #4b5563;
     font-weight: 600;
@@ -79,18 +73,24 @@
 
 /* Moldura Interna do Display LCD */
 .lcd-frame {
+    flex: 1 1 auto;
+    min-height: 0;
     background-color: #0b0f19;
     border-radius: 12px;
     padding: 16px;
     box-shadow: inset 0 6px 14px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(255, 255, 255, 0.3);
     border: 2px solid #52525b;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Tela LCD propriamente dita */
 .lcd-display {
+    flex: 1 1 auto;
+    height: 100%;
     background-color: #f7f6f0;
     color: #111827;
-    min-height: 580px;
+    min-height: 0;
     border-radius: 6px;
     position: relative;
     display: flex;
@@ -102,6 +102,7 @@
 
 /* 4. Barra de Progresso Superior 2026 */
 .timeline-bar-2026 {
+    flex: 0 0 auto;
     background-color: #e5e4dc;
     border-bottom: 2px solid #c9c7bb;
     padding: 12px 18px;
@@ -185,15 +186,19 @@
 /* Área de Conteúdo da Votação */
 .lcd-content {
     flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    padding: 24px 30px;
+    padding: 16px 24px;
     position: relative;
+    overflow: hidden;
 }
 
 /* Cabeçalho do Cargo */
 .role-header-section {
-    margin-bottom: 20px;
+    flex: 0 0 auto;
+    min-width: 0;
+    margin-bottom: 10px;
 }
 
 .role-subtext {
@@ -211,14 +216,20 @@
     letter-spacing: -0.02em;
     text-transform: uppercase;
     margin-top: 4px;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 /* Linha de Dígitos */
 .digit-input-container {
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
     gap: 16px;
-    margin: 20px 0 25px 0;
+    margin: 8px 0 12px;
 }
 
 .digit-label {
@@ -261,20 +272,28 @@
 .candidate-details-layout {
     display: flex;
     justify-content: space-between;
-    gap: 30px;
+    gap: 20px;
     flex: 1;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .candidate-text-data {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    min-width: 0;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    gap: 10px 16px;
+    overflow: hidden;
 }
 
 .data-group {
+    min-width: 0;
+    overflow: hidden;
     border-bottom: 1px solid #dcdad0;
-    padding-bottom: 10px;
+    padding-bottom: 6px;
 }
 
 .data-group-label {
@@ -289,6 +308,11 @@
     font-weight: 800;
     color: #111827;
     margin-top: 2px;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 }
 
 .data-group-value.small {
@@ -299,10 +323,14 @@
 
 /* Fotos do Candidato e Vices/Suplentes */
 .candidate-photos-area {
+    flex: 0 1 auto;
+    min-width: 0;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 12px;
+    overflow: hidden;
 }
 
 .photo-card-main {
@@ -357,6 +385,7 @@
 /* Estados Especiais: Voto Branco, Nulo, etc */
 .state-banner-center {
     flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -370,6 +399,7 @@
     font-weight: 900;
     letter-spacing: -0.01em;
     color: #111827;
+    overflow-wrap: anywhere;
 }
 
 .state-subtitle {
@@ -377,10 +407,16 @@
     font-weight: 600;
     color: #4b5563;
     max-width: 550px;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
 }
 
 /* 10. Mensagem "CONFIRA O SEU VOTO" piscante */
 .confira-voto-banner {
+    flex: 0 0 auto;
     background-color: #1f2937;
     color: #facc15;
     text-align: center;
@@ -395,6 +431,7 @@
 
 /* Rodapé de Instruções Oficiais */
 .lcd-footer-instructions {
+    flex: 0 0 auto;
     border-top: 2px solid #27272a;
     padding: 10px 18px;
     background-color: #eceae0;
@@ -415,56 +452,6 @@
 
 .footer-keys-tip span.key-orange {
     color: #c2410c;
-}
-
-/* 22. Componente de Libras */
-.libras-container {
-    position: absolute;
-    bottom: 45px;
-    right: 25px;
-    width: 140px;
-    height: 170px;
-    background: #0f172a;
-    border-radius: 8px;
-    border: 2px solid #38bdf8;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    z-index: 10;
-}
-
-.libras-header {
-    background: #1e293b;
-    color: #38bdf8;
-    font-size: 0.65rem;
-    font-weight: 800;
-    text-align: center;
-    padding: 3px 0;
-    letter-spacing: 0.05em;
-}
-
-.libras-canvas-box {
-    flex: 1;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #020617;
-}
-
-.libras-canvas-box svg {
-    width: 85%;
-    height: 85%;
-}
-
-.libras-sign-caption {
-    font-size: 0.65rem;
-    color: #94a3b8;
-    text-align: center;
-    padding: 2px;
-    background: #0f172a;
-    font-weight: 600;
 }
 
 /* 20. Tela Final: FIM */
@@ -555,4 +542,310 @@
     display: flex;
     align-items: center;
     gap: 6px;
+}
+
+@media (max-height: 760px) {
+    .urna-chassis {
+        padding: 16px;
+    }
+
+    .urna-top-header {
+        margin-bottom: 10px;
+    }
+
+    .lcd-frame {
+        padding: 10px;
+    }
+
+    .timeline-bar-2026 {
+        padding: 8px 12px;
+    }
+
+    .lcd-content {
+        padding: 10px 16px;
+    }
+
+    .role-title {
+        font-size: 1.8rem;
+    }
+
+    .digit-box {
+        width: 38px;
+        height: 46px;
+        font-size: 1.7rem;
+    }
+
+    .candidate-text-data {
+        gap: 6px 10px;
+    }
+
+    .photo-card-main {
+        width: 124px;
+        height: 156px;
+    }
+
+    .photo-card-small {
+        width: 72px;
+        height: 90px;
+    }
+
+    .candidate-photos-area {
+        gap: 8px;
+    }
+
+    .lcd-footer-instructions {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .urna-screen-body {
+        padding: 8px;
+    }
+
+    .urna-chassis {
+        height: calc(100dvh - 16px);
+        padding: 12px;
+        border-width: 3px;
+        border-radius: 12px;
+    }
+
+    .urna-top-header {
+        margin-bottom: 8px;
+        padding: 0;
+    }
+
+    .urna-brand {
+        gap: 8px;
+    }
+
+    .urna-title-box h1 {
+        font-size: 1rem;
+    }
+
+    .urna-title-box p {
+        font-size: 0.65rem;
+    }
+
+    .urna-hardware-info {
+        display: none;
+    }
+
+    .lcd-frame {
+        padding: 6px;
+    }
+
+    .timeline-bar-2026 {
+        padding: 6px 4px;
+    }
+
+    .step-node {
+        width: 22px;
+        height: 22px;
+        font-size: 0.7rem;
+    }
+
+    .step-label {
+        margin-top: 3px;
+        font-size: 0.55rem;
+        letter-spacing: 0;
+    }
+
+    .lcd-content {
+        padding: 8px;
+    }
+
+    .role-header-section {
+        margin-bottom: 6px;
+    }
+
+    .role-subtext {
+        font-size: 0.7rem;
+    }
+
+    .role-title {
+        margin-top: 2px;
+        font-size: 1.15rem;
+    }
+
+    .digit-input-container {
+        gap: 8px;
+        margin: 5px 0 8px;
+    }
+
+    .digit-label {
+        font-size: 0.85rem;
+    }
+
+    .digit-boxes {
+        gap: 5px;
+    }
+
+    .digit-box {
+        width: 32px;
+        height: 42px;
+        font-size: 1.55rem;
+    }
+
+    .candidate-details-layout {
+        gap: 8px;
+    }
+
+    .candidate-text-data {
+        gap: 6px 8px;
+    }
+
+    .data-group-label {
+        font-size: 0.65rem;
+    }
+
+    .data-group-value {
+        font-size: 1rem;
+    }
+
+    .data-group-value.small {
+        font-size: 0.85rem;
+    }
+
+    .candidate-photos-area {
+        gap: 6px;
+    }
+
+    .photo-card-main {
+        width: 76px;
+        height: 96px;
+    }
+
+    .secondary-photos-grid {
+        gap: 4px;
+    }
+
+    .photo-card-small {
+        width: 42px;
+        height: 54px;
+    }
+
+    .state-title-large {
+        font-size: 1.7rem;
+    }
+
+    .state-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .confira-voto-banner {
+        margin-top: 6px;
+        padding: 6px;
+        font-size: 1rem;
+    }
+
+    .lcd-footer-instructions {
+        gap: 6px;
+        padding: 6px 8px;
+        font-size: 0.65rem;
+    }
+
+    .waiting-screen {
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .pairing-card {
+        width: 100%;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .qrcode-box {
+        flex: 0 0 92px;
+        width: 92px;
+        height: 92px;
+        padding: 4px;
+    }
+
+    .pairing-info {
+        min-width: 0;
+        gap: 6px;
+    }
+
+    .pairing-info h2 {
+        font-size: 1rem !important;
+    }
+
+    .pairing-info p {
+        font-size: 0.75rem !important;
+    }
+
+    .pairing-code-display {
+        padding: 6px;
+        font-size: 1.2rem;
+        letter-spacing: 0;
+    }
+}
+
+@media (max-height: 560px) {
+    .urna-chassis {
+        padding: 8px;
+    }
+
+    .urna-top-header {
+        margin-bottom: 6px;
+    }
+
+    .lcd-frame {
+        padding: 5px;
+    }
+
+    .timeline-bar-2026 {
+        padding: 4px 8px;
+    }
+
+    .step-label {
+        margin-top: 2px;
+        font-size: 0.5rem;
+    }
+
+    .lcd-content {
+        padding: 5px 10px;
+    }
+
+    .role-title {
+        font-size: 0.95rem;
+    }
+
+    .digit-input-container {
+        margin: 3px 0 5px;
+    }
+
+    .digit-box {
+        width: 28px;
+        height: 34px;
+        font-size: 1.25rem;
+    }
+
+    .candidate-text-data {
+        gap: 4px 8px;
+    }
+
+    .data-group-value,
+    .data-group-value.small {
+        -webkit-line-clamp: 1;
+        font-size: 0.75rem;
+    }
+
+    .photo-card-main {
+        width: 54px;
+        height: 68px;
+    }
+
+    .photo-card-small {
+        width: 32px;
+        height: 40px;
+    }
+
+    .lcd-footer-instructions {
+        padding: 4px 6px;
+        font-size: 0.6rem;
+    }
 }
