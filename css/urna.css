@@ -1,0 +1,558 @@
+/* ==========================================================================
+   URNA ELETRÔNICA BRASILEIRA 2026 - TELA LCD DO TERMINAL DO ELEITOR
+   Fidelidade oficial de acordo com as especificações do TSE 2026
+   ========================================================================== */
+
+.urna-screen-body {
+    background: radial-gradient(circle at 50% 30%, #1e293b 0%, #090d16 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: var(--font-official);
+}
+
+/* Moldura e Gabinete da Urna Eletrônica */
+.urna-chassis {
+    width: 100%;
+    max-width: 1060px;
+    background: linear-gradient(145deg, #d8d6cb 0%, #c5c3b6 100%);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), inset 0 2px 4px rgba(255, 255, 255, 0.6);
+    border: 4px solid #a8a699;
+    position: relative;
+}
+
+/* Identificação superior da carcaça */
+.urna-top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.tse-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tse-coat {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.tse-title-box h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+}
+
+.tse-title-box p {
+    font-size: 0.8rem;
+    color: #4b5563;
+    font-weight: 600;
+}
+
+.urna-hardware-info {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #374151;
+    text-align: right;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Moldura Interna do Display LCD */
+.lcd-frame {
+    background-color: #0b0f19;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: inset 0 6px 14px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(255, 255, 255, 0.3);
+    border: 2px solid #52525b;
+}
+
+/* Tela LCD propriamente dita */
+.lcd-display {
+    background-color: #f7f6f0;
+    color: #111827;
+    min-height: 580px;
+    border-radius: 6px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: default;
+}
+
+/* 4. Barra de Progresso Superior 2026 */
+.timeline-bar-2026 {
+    background-color: #e5e4dc;
+    border-bottom: 2px solid #c9c7bb;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+}
+
+.timeline-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    width: 100%;
+    height: 3px;
+    background-color: #cbd5e1;
+    z-index: 1;
+}
+
+.timeline-step.completed:not(:last-child)::after {
+    background-color: #16a34a;
+}
+
+.step-node {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 3px solid #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #64748b;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.timeline-step.completed .step-node {
+    background-color: #16a34a;
+    border-color: #15803d;
+    color: #ffffff;
+}
+
+.timeline-step.active .step-node {
+    background-color: #1d4ed8;
+    border-color: #1e40af;
+    color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.25);
+    transform: scale(1.15);
+}
+
+.step-label {
+    margin-top: 6px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+.timeline-step.active .step-label {
+    color: #1d4ed8;
+    font-weight: 800;
+}
+
+.timeline-step.completed .step-label {
+    color: #16a34a;
+}
+
+/* Área de Conteúdo da Votação */
+.lcd-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 30px;
+    position: relative;
+}
+
+/* Cabeçalho do Cargo */
+.role-header-section {
+    margin-bottom: 20px;
+}
+
+.role-subtext {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.role-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+/* Linha de Dígitos */
+.digit-input-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 20px 0 25px 0;
+}
+
+.digit-label {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #374151;
+}
+
+.digit-boxes {
+    display: flex;
+    gap: 8px;
+}
+
+.digit-box {
+    width: 44px;
+    height: 56px;
+    border: 2px solid #374151;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.1rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: #111827;
+}
+
+.digit-box.active {
+    border-color: #1d4ed8;
+    border-width: 3px;
+    animation: boxPulse 1s infinite alternate;
+}
+
+@keyframes boxPulse {
+    from { background-color: #ffffff; }
+    to { background-color: #eff6ff; }
+}
+
+/* Detalhes do Candidato */
+.candidate-details-layout {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    flex: 1;
+}
+
+.candidate-text-data {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.data-group {
+    border-bottom: 1px solid #dcdad0;
+    padding-bottom: 10px;
+}
+
+.data-group-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+}
+
+.data-group-value {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #111827;
+    margin-top: 2px;
+}
+
+.data-group-value.small {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+/* Fotos do Candidato e Vices/Suplentes */
+.candidate-photos-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.photo-card-main {
+    width: 170px;
+    height: 215px;
+    background: #e2e8f0;
+    border: 2px solid #374151;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+.photo-card-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.secondary-photos-grid {
+    display: flex;
+    gap: 8px;
+}
+
+.photo-card-small {
+    width: 100px;
+    height: 130px;
+    background: #e2e8f0;
+    border: 1px solid #4b5563;
+    overflow: hidden;
+    position: relative;
+}
+
+.photo-card-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-badge-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.9);
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 2px;
+}
+
+/* Estados Especiais: Voto Branco, Nulo, etc */
+.state-banner-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 15px;
+}
+
+.state-title-large {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    color: #111827;
+}
+
+.state-subtitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #4b5563;
+    max-width: 550px;
+}
+
+/* 10. Mensagem "CONFIRA O SEU VOTO" piscante */
+.confira-voto-banner {
+    background-color: #1f2937;
+    color: #facc15;
+    text-align: center;
+    padding: 10px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    border-radius: 4px;
+    margin-top: 15px;
+    border: 2px solid #ca8a04;
+}
+
+/* Rodapé de Instruções Oficiais */
+.lcd-footer-instructions {
+    border-top: 2px solid #27272a;
+    padding: 10px 18px;
+    background-color: #eceae0;
+    font-size: 0.85rem;
+    color: #111827;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-keys-tip span {
+    font-weight: 800;
+}
+
+.footer-keys-tip span.key-green {
+    color: #15803d;
+}
+
+.footer-keys-tip span.key-orange {
+    color: #c2410c;
+}
+
+/* 22. Componente de Libras */
+.libras-container {
+    position: absolute;
+    bottom: 45px;
+    right: 25px;
+    width: 140px;
+    height: 170px;
+    background: #0f172a;
+    border-radius: 8px;
+    border: 2px solid #38bdf8;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.libras-header {
+    background: #1e293b;
+    color: #38bdf8;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-align: center;
+    padding: 3px 0;
+    letter-spacing: 0.05em;
+}
+
+.libras-canvas-box {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #020617;
+}
+
+.libras-canvas-box svg {
+    width: 85%;
+    height: 85%;
+}
+
+.libras-sign-caption {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    text-align: center;
+    padding: 2px;
+    background: #0f172a;
+    font-weight: 600;
+}
+
+/* 20. Tela Final: FIM */
+.screen-fim-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f7f6f0;
+    gap: 20px;
+}
+
+.screen-fim-title {
+    font-size: 6.5rem;
+    font-weight: 900;
+    color: #111827;
+    letter-spacing: 0.1em;
+}
+
+.screen-fim-voted {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #15803d;
+    background: #dcfce7;
+    padding: 8px 24px;
+    border-radius: 8px;
+    border: 2px solid #86efac;
+}
+
+/* Tela de Pareamento e Aguardando Mesário */
+.waiting-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+    gap: 24px;
+}
+
+.pairing-card {
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.qrcode-box {
+    width: 170px;
+    height: 170px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.pairing-info {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pairing-code-display {
+    font-family: var(--font-mono);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1e3a8a;
+    background: #eff6ff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px dashed #3b82f6;
+    letter-spacing: 0.05em;
+}
+
+.refresh-timer {
+    font-size: 0.85rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}

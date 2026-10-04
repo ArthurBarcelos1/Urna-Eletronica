@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Teclado Eleitoral — Urna 2026</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/teclado.css">
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body class="teclado-body">
+
+    <div class="teclado-mobile-wrapper">
+        
+        <!-- Barra de Status Superior -->
+        <header class="teclado-status-header">
+            <div class="conn-indicator">
+                <div class="dot-status" id="statusDot"></div>
+                <span id="statusText">DESCONECTADO</span>
+            </div>
+            <div class="session-badge" id="sessionInfo">Aguardando código</div>
+        </header>
+
+        <!-- Etapa Atual da Urna -->
+        <div style="background: rgba(0, 0, 0, 0.4); border-radius: 8px; padding: 6px 12px; text-align: center;">
+            <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Etapa Atual:</span>
+            <div id="currentStepDisplay" style="font-size: 0.95rem; font-weight: 800; color: #38bdf8;">Conecte o teclado para iniciar</div>
+        </div>
+
+        <!-- 1. TELA DE CONEXÃO / DIGITAÇÃO DE CÓDIGO -->
+        <div class="teclado-connect-screen" id="connectScreen">
+            <h2>Parear com a Urna</h2>
+            <p>Digite o código de 12 dígitos exibido na tela da Urna ou aponte a câmera para o QR Code:</p>
+
+            <input type="text" class="input-code-field" id="inputPairingCode" placeholder="0000-0000-0000" maxlength="14">
+
+            <button type="button" class="btn-connect-action" id="btnConnectCode">CONECTAR TECLADO</button>
+            
+            <button type="button" class="btn-connect-action" id="btnScanQR" style="background: #334155; margin-top: -6px;">
+                📷 Ler QR Code com a Câmera
+            </button>
+
+            <!-- Container do Vídeo da Câmera -->
+            <div class="scanner-video-box" id="cameraContainer">
+                <video id="scannerVideo" playsinline></video>
+            </div>
+        </div>
+
+        <!-- 2. TECLADO MECÂNICO OFICIAL (Exibido após conectar) -->
+        <div class="teclado-frame" id="tecladoFrame" style="display: none;">
+            
+            <!-- Grid das Teclas Numéricas -->
+            <div class="numeric-grid">
+                <!-- Linha 1 -->
+                <button type="button" class="key-btn key-num" data-key="1">
+                    <span class="braille-tag">⠁</span>
+                    <span>1</span>
+                </button>
+                <button type="button" class="key-btn key-num" data-key="2">
+                    <span class="braille-tag">⠃</span>
+                    <span>2</span>
+                </button>
+                <button type="button" class="key-btn key-num" data-key="3">
+                    <span class="braille-tag">⠉</span>
+                    <span>3</span>
+                </button>
+
+                <!-- Linha 2 -->
+                <button type="button" class="key-btn key-num" data-key="4">
+                    <span class="braille-tag">⠙</span>
+                    <span>4</span>
+                </button>
+                <button type="button" class="key-btn key-num key-num-5" data-key="5">
+                    <span class="braille-tag">⠑</span>
+                    <span>5</span>
+                    <!-- Marcação tátil de orientação no número 5 -->
+                    <span class="tactile-dot"></span>
+                </button>
+                <button type="button" class="key-btn key-num" data-key="6">
+                    <span class="braille-tag">⠋</span>
+                    <span>6</span>
+                </button>
+
+                <!-- Linha 3 -->
+                <button type="button" class="key-btn key-num" data-key="7">
+                    <span class="braille-tag">⠛</span>
+                    <span>7</span>
+                </button>
+                <button type="button" class="key-btn key-num" data-key="8">
+                    <span class="braille-tag">⠓</span>
+                    <span>8</span>
+                </button>
+                <button type="button" class="key-btn key-num" data-key="9">
+                    <span class="braille-tag">⠊</span>
+                    <span>9</span>
+                </button>
+
+                <!-- Linha do Zero Centralizado -->
+                <button type="button" class="key-btn key-num zero-row" data-key="0">
+                    <span class="braille-tag">⠚</span>
+                    <span>0</span>
+                </button>
+            </div>
+
+            <!-- Linha Inferior com as 3 Teclas de Ação Oficiais -->
+            <div class="action-keys-row">
+                <!-- Tecla BRANCO -->
+                <button type="button" class="key-btn key-branco" data-key="BRANCO">
+                    BRANCO
+                </button>
+
+                <!-- Tecla CORRIGE -->
+                <button type="button" class="key-btn key-corrige" data-key="CORRIGE">
+                    CORRIGE
+                </button>
+
+                <!-- Tecla CONFIRMA -->
+                <button type="button" class="key-btn key-confirma" data-key="CONFIRMA">
+                    CONFIRMA
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Scripts do Teclado -->
+    <script src="js/audio.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/teclado.js"></script>
+</body>
+</html>

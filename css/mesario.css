@@ -1,0 +1,503 @@
+/* ==========================================================================
+   URNA ELETRÔNICA BRASILEIRA 2026 - TERMINAL DO MESÁRIO
+   Painel de controle com validação de CPF, monitor de etapas, logs e RDV Shuffle
+   ========================================================================== */
+
+.mesario-body {
+    background: #090d16;
+    color: #f1f5f9;
+    min-height: 100vh;
+    font-family: var(--font-official);
+    padding: 24px;
+}
+
+.mesario-container {
+    max-width: 1360px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Barra Superior do Mesário */
+.mesario-navbar {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 16px;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.mesario-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.mesario-logo-badge {
+    background: #1e3a8a;
+    color: #60a5fa;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    border: 1px solid #2563eb;
+}
+
+.mesario-title-wrap h1 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #f8fafc;
+}
+
+.mesario-title-wrap p {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.system-status-indicators {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Grid Principal de 2 Colunas */
+.mesario-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 1024px) {
+    .mesario-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Cartões do Terminal */
+.panel-card {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.panel-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #1f2937;
+    padding-bottom: 12px;
+}
+
+.panel-card-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Seção de Validação de CPF e Liberação */
+.cpf-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cpf-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.cpf-input-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.cpf-input {
+    width: 100%;
+    background: #030712;
+    border: 2px solid #374151;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: 0.05em;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.cpf-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.cpf-input.valid {
+    border-color: #22c55e;
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.cpf-input.invalid {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.cpf-validation-feedback {
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-height: 20px;
+}
+
+.cpf-validation-feedback.valid {
+    color: #4ade80;
+}
+
+.cpf-validation-feedback.invalid {
+    color: #f87171;
+}
+
+.btn-liberar-eleitor {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-liberar-eleitor:hover:not(:disabled) {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.4);
+}
+
+.btn-liberar-eleitor:disabled {
+    background: #374151;
+    color: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Eleitores Rápidos para Teste */
+.quick-voters-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.quick-voter-item {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.quick-voter-item:hover {
+    background: #334155;
+    border-color: #64748b;
+}
+
+.voter-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.voter-cpf {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* Painel de Acompanhamento das Etapas */
+.voting-status-box {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #1e293b;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.status-step-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.current-step-badge {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #38bdf8;
+}
+
+/* Barra de progresso do eleitor no mesário */
+.mesario-progress-track {
+    width: 100%;
+    height: 10px;
+    background: #1e293b;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.mesario-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+.stages-mini-list {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.stage-pill {
+    padding: 6px 2px;
+    background: #1e293b;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-align: center;
+    color: #64748b;
+    border: 1px solid #334155;
+}
+
+.stage-pill.active {
+    background: #1d4ed8;
+    color: #ffffff;
+    border-color: #3b82f6;
+}
+
+.stage-pill.done {
+    background: #166534;
+    color: #bbf7d0;
+    border-color: #22c55e;
+}
+
+/* Seção do RDV (Registro Digital do Voto) e Embaralhamento em Tempo Real */
+.rdv-section-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.rdv-explanation-box {
+    background: rgba(30, 58, 138, 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: #bfdbfe;
+    line-height: 1.4;
+}
+
+.rdv-table-container {
+    background: #030712;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.rdv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+}
+
+.rdv-table th {
+    background: #0f172a;
+    color: #94a3b8;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #1f2937;
+    position: sticky;
+    top: 0;
+}
+
+.rdv-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #111827;
+    color: #cbd5e1;
+}
+
+/* Animação quando uma linha do RDV é embaralhada */
+.rdv-row-shuffled {
+    animation: shuffleHighlight 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes shuffleHighlight {
+    0% { background-color: rgba(245, 158, 11, 0.4); transform: scale(1.02); }
+    50% { background-color: rgba(34, 197, 94, 0.3); }
+    100% { background-color: transparent; transform: scale(1); }
+}
+
+/* Logs do Sistema */
+.terminal-logs-window {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 14px;
+    height: 220px;
+    overflow-y: auto;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.log-entry {
+    display: flex;
+    gap: 10px;
+    line-height: 1.4;
+}
+
+.log-time {
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.log-msg {
+    color: #94a3b8;
+}
+
+.log-msg.highlight {
+    color: #38bdf8;
+    font-weight: 700;
+}
+
+.log-msg.success {
+    color: #4ade80;
+    font-weight: 700;
+}
+
+.log-msg.alert {
+    color: #f59e0b;
+    font-weight: 700;
+}
+
+/* Ações e Boletim de Urna */
+.mesario-actions-bar {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.btn-secondary {
+    background: #1f2937;
+    color: #e2e8f0;
+    border: 1px solid #374151;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-secondary:hover {
+    background: #374151;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+/* Modal do Boletim de Urna (BU) */
+.bu-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.bu-modal-card {
+    background: #ffffff;
+    color: #111827;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    font-family: var(--font-mono);
+}
+
+.bu-paper-content {
+    padding: 24px;
+    overflow-y: auto;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    background: #fafafa;
+    border-bottom: 2px dashed #9ca3af;
+}
+
+.bu-header {
+    text-align: center;
+    border-bottom: 1px solid #111827;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+}
+
+.bu-header h2 {
+    font-size: 1rem;
+    font-weight: 800;
+}

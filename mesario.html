@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal do Mesário — Eleições 2026</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/mesario.css">
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body class="mesario-body">
+
+    <div class="mesario-container">
+
+        <!-- Top Navigation -->
+        <header class="mesario-navbar">
+            <div class="mesario-brand">
+                <div class="mesario-logo-badge">JUSTIÇA ELEITORAL</div>
+                <div class="mesario-title-wrap">
+                    <h1>Terminal do Mesário</h1>
+                    <p>MUNICÍPIO: SÃO PAULO | ZONA: 001 | SEÇÃO: 001 — ELEIÇÕES 2026</p>
+                </div>
+            </div>
+
+            <div class="system-status-indicators">
+                <span class="badge badge-success" id="urnaConnBadge">● Urna Conectada</span>
+                <span class="badge badge-warning" id="tecladoConnBadge">○ Teclado Aguardando</span>
+            </div>
+        </header>
+
+        <!-- Grid Principal do Mesário -->
+        <div class="mesario-grid">
+            
+            <!-- Coluna 1: Habilitação de Eleitor e Monitor de Etapas -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                
+                <!-- Cartão 1: Validação de CPF e Liberação -->
+                <section class="panel-card">
+                    <div class="panel-card-header">
+                        <h2 class="panel-card-title">
+                            <span>👤</span> Identificação do Eleitor
+                        </h2>
+                        <span class="badge badge-info">Obrigatório</span>
+                    </div>
+
+                    <div class="cpf-form-group">
+                        <label for="cpfInput" class="cpf-label">Digite o CPF do Eleitor</label>
+                        <div class="cpf-input-box">
+                            <input type="text" id="cpfInput" class="cpf-input" placeholder="000.000.000-00" maxlength="14" autocomplete="off">
+                        </div>
+                        <div id="cpfFeedback" class="cpf-validation-feedback">
+                            Digite os 11 dígitos do CPF para validar
+                        </div>
+                    </div>
+
+                    <div id="voterNameDisplay" style="font-size: 0.9rem; font-weight: 700; color: #38bdf8; min-height: 20px;"></div>
+
+                    <button type="button" class="btn-liberar-eleitor" id="btnLiberar" disabled>
+                        <span>✓</span> LIBERAR ELEITOR PARA VOTAÇÃO
+                    </button>
+
+                    <!-- Lista de Eleitores Rápidos para Teste -->
+                    <div style="margin-top: 10px;">
+                        <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Eleitores Cadastrados (Clique para Testar):</span>
+                        <div class="quick-voters-list" id="quickVotersList">
+                            <!-- Preenchido via JS com CPFs válidos -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cartão 2: Monitor de Etapas da Votação em Tempo Real -->
+                <section class="panel-card">
+                    <div class="panel-card-header">
+                        <h2 class="panel-card-title">
+                            <span>📊</span> Etapas da Votação na Cabine
+                        </h2>
+                        <span class="badge badge-success">Tempo Real</span>
+                    </div>
+
+                    <div class="voting-status-box">
+                        <div class="status-step-banner">
+                            <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 700;">CARGO ATUAL:</span>
+                            <span class="current-step-badge" id="currentStepBadge">Aguardando Eleitor</span>
+                        </div>
+
+                        <!-- Barra de Progresso do Eleitor -->
+                        <div class="mesario-progress-track">
+                            <div class="mesario-progress-fill" id="progressFill"></div>
+                        </div>
+
+                        <!-- Pílulas dos Cargos Oficiais -->
+                        <div class="stages-mini-list">
+                            <div class="stage-pill" data-step="1">1. Dep. Fed.</div>
+                            <div class="stage-pill" data-step="2">2. Dep. Est.</div>
+                            <div class="stage-pill" data-step="3">3. Senador 1</div>
+                            <div class="stage-pill" data-step="4">4. Senador 2</div>
+                            <div class="stage-pill" data-step="5">5. Gov.</div>
+                            <div class="stage-pill" data-step="6">6. Pres.</div>
+                        </div>
+                    </div>
+                    
+                    <p style="font-size: 0.75rem; color: #64748b; line-height: 1.4;">
+                        * O terminal do mesário monitora exclusivamente o progresso temporal das etapas, preservando inviolável o sigilo do voto do cidadão conforme a Constituição Federal.
+                    </p>
+                </section>
+
+            </div>
+
+            <!-- Coluna 2: Embaralhamento em Tempo Real do RDV e Logs de Auditoria -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                
+                <!-- Cartão 3: Registro Digital do Voto (RDV) e Embaralhamento -->
+                <section class="panel-card">
+                    <div class="panel-card-header">
+                        <h2 class="panel-card-title">
+                            <span>🔀</span> Registro Digital do Voto (RDV) — Embaralhamento em Tempo Real
+                        </h2>
+                        <span class="badge badge-warning" id="totalVotosRDV">0 votos computados</span>
+                    </div>
+
+                    <div class="rdv-section-wrap">
+                        <div class="rdv-explanation-box">
+                            <strong>Princípio Criptográfico do Sigilo:</strong> A cada voto concluído, a tabela interna do RDV realiza um embaralhamento automático dos blocos de dados (Fisher-Yates shuffle), desvinculando matematicamente a ordem cronológica dos eleitores dos votos registrados.
+                        </div>
+
+                        <!-- Tabela Interativa do RDV -->
+                        <div class="rdv-table-container">
+                            <table class="rdv-table">
+                                <thead>
+                                    <tr>
+                                        <th>Posição</th>
+                                        <th>Cargo</th>
+                                        <th>Voto / Número</th>
+                                        <th>Candidato / Legenda</th>
+                                        <th>Hash de Verificação</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rdvTableBody">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; color: #64748b; padding: 25px;">
+                                            Nenhum voto computado ainda. Habilite um eleitor para iniciar a votação.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cartão 4: Logs de Auditoria do Sistema -->
+                <section class="panel-card">
+                    <div class="panel-card-header">
+                        <h2 class="panel-card-title">
+                            <span>📜</span> Logs de Auditoria da Urna (Tempo Real)
+                        </h2>
+                        <span class="badge badge-info">Auditoria Concorrente</span>
+                    </div>
+
+                    <div class="terminal-logs-window" id="logsWindow">
+                        <!-- Logs dinâmicos inseridos via JS -->
+                    </div>
+
+                    <div class="mesario-actions-bar">
+                        <button type="button" class="btn-primary" id="btnEmitirBU">
+                            📄 EMITIR BOLETIM DE URNA (BU)
+                        </button>
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modal do Boletim de Urna (BU) -->
+    <div class="bu-modal-overlay" id="buModal" style="display: none;">
+        <div class="bu-modal-card">
+            <div class="bu-paper-content" id="buContent">
+                <!-- Conteúdo do BU impresso -->
+            </div>
+            <div style="padding: 16px; background: #f1f5f9; display: flex; justify-content: flex-end; gap: 12px;">
+                <button type="button" class="btn-secondary" id="btnCloseBU">Fechar</button>
+                <button type="button" class="btn-primary" id="btnPrintBU">Imprimir BU</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts do Mesário -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/mesario.js"></script>
+</body>
+</html>

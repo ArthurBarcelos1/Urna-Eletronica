@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <radialGradient id="starGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </radialGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Círculo de fundo institucional -->
+  <circle cx="250" cy="250" r="230" fill="#0f172a" stroke="#22c55e" stroke-width="8"/>
+  <circle cx="250" cy="250" r="215" fill="none" stroke="#facc15" stroke-width="4"/>
+
+  <!-- Estrela de 5 pontas -->
+  <polygon points="250,50 305,190 450,195 335,285 375,425 250,345 125,425 165,285 50,195 195,190" fill="url(#starGrad)" stroke="#854d0e" stroke-width="4"/>
+
+  <!-- Escudo Central Azul -->
+  <circle cx="250" cy="250" r="95" fill="url(#shieldGrad)" stroke="#ffffff" stroke-width="6"/>
+
+  <!-- Cruzeiro do Sul estilizado -->
+  <!-- Estrela Alfa -->
+  <circle cx="250" cy="305" r="7" fill="#ffffff"/>
+  <!-- Estrela Beta -->
+  <circle cx="215" cy="245" r="7" fill="#ffffff"/>
+  <!-- Estrela Gama -->
+  <circle cx="250" cy="195" r="7" fill="#ffffff"/>
+  <!-- Estrela Delta -->
+  <circle cx="285" cy="235" r="7" fill="#ffffff"/>
+  <!-- Estrela Epsilon (Intrometida) -->
+  <circle cx="265" cy="265" r="4.5" fill="#ffffff"/>
+
+  <!-- Faixa Republicana Oficial -->
+  <path d="M 90 435 Q 250 480 410 435 L 420 460 Q 250 510 80 460 Z" fill="#15803d" stroke="#facc15" stroke-width="2"/>
+  <text x="250" y="465" font-family="'Atkinson Hyperlegible', Arial, sans-serif" font-size="18" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="2">JUSTIÇA ELEITORAL 2026</text>
+</svg>

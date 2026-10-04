@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urna Eletrônica 2026 — Visor Oficial da Justiça Eleitoral</title>
+    <!-- Fonte Oficial Atkinson Hyperlegible -->
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/urna.css">
+    <!-- Firebase App & Realtime Database CDN -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body class="urna-screen-body">
+
+    <!-- Gabinete Externo da Urna -->
+    <main class="urna-chassis">
+        <!-- Identificação Superior -->
+        <header class="urna-top-header">
+            <div class="tse-brand">
+                <div class="tse-coat">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="tse-title-box">
+                    <h1>JUSTIÇA ELEITORAL</h1>
+                    <p>Tribunal Superior Eleitoral — Modelo UE2026</p>
+                </div>
+            </div>
+            <div class="urna-hardware-info">
+                <span>SEÇÃO: 001 | ZONA: 001</span><br>
+                <span>SISTEMA: BIOMÉTRICO 2026</span>
+            </div>
+        </header>
+
+        <!-- Moldura Interna do Display LCD -->
+        <div class="lcd-frame">
+            <div class="lcd-display" id="lcdDisplay">
+                
+                <!-- 1. TELA DE PAREAMENTO / AGUARDANDO MESÁRIO -->
+                <div class="waiting-screen" id="waitingScreen">
+                    <!-- Cartão de Pareamento do Teclado Celular -->
+                    <div class="pairing-card" id="pairingCard">
+                        <div class="qrcode-box">
+                            <canvas id="qrCanvas"></canvas>
+                        </div>
+                        <div class="pairing-info">
+                            <span class="badge badge-info">Conexão do Teclado (Celular)</span>
+                            <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a;">Aponte a câmera do celular</h2>
+                            <p style="font-size: 0.9rem; color: #475569;">Ou digite o código de 12 dígitos no teclado do celular:</p>
+                            <div class="pairing-code-display" id="pairingCodeText">---- - ---- - ----</div>
+                            <div class="refresh-timer">
+                                <span>⏱ Renovando código em <strong id="timerSeconds">15</strong>s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cartão de Aguardando Liberação do Mesário -->
+                    <div id="mesarioWaitingCard" style="display: none; text-align: center; max-width: 500px;">
+                        <div style="font-size: 3.5rem; margin-bottom: 10px;">🗳️</div>
+                        <h2 style="font-size: 1.9rem; font-weight: 900; color: #1e3a8a;">AGUARDANDO ELEITOR</h2>
+                        <p style="font-size: 1.15rem; color: #475569; margin-top: 8px;">
+                            Dirija-se à mesa do mesário para conferência do documento de identificação e validação do CPF.
+                        </p>
+                        <div style="margin-top: 20px;">
+                            <span class="badge badge-success" style="font-size: 0.85rem; padding: 6px 14px;">● Teclado Conectado e Ativo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. TELA DE VOTAÇÃO (CARGOS 2026) -->
+                <div id="votingScreen" style="display: none; flex-direction: column; flex: 1;">
+                    <!-- 4. Barra de Progresso Superior 2026 -->
+                    <nav class="timeline-bar-2026" aria-label="Progresso da Votação">
+                        <div class="timeline-step active" data-step="0">
+                            <div class="step-node">1</div>
+                            <span class="step-label">Dep. Fed.</span>
+                        </div>
+                        <div class="timeline-step" data-step="1">
+                            <div class="step-node">2</div>
+                            <span class="step-label">Dep. Est.</span>
+                        </div>
+                        <div class="timeline-step" data-step="2">
+                            <div class="step-node">3</div>
+                            <span class="step-label">Senador 1</span>
+                        </div>
+                        <div class="timeline-step" data-step="3">
+                            <div class="step-node">4</div>
+                            <span class="step-label">Senador 2</span>
+                        </div>
+                        <div class="timeline-step" data-step="4">
+                            <div class="step-node">5</div>
+                            <span class="step-label">Governador</span>
+                        </div>
+                        <div class="timeline-step" data-step="5">
+                            <div class="step-node">6</div>
+                            <span class="step-label">Presidente</span>
+                        </div>
+                    </nav>
+
+                    <!-- Conteúdo Principal do Cargo -->
+                    <div class="lcd-content">
+                        <!-- Cabeçalho do Cargo -->
+                        <div class="role-header-section">
+                            <div class="role-subtext" id="roleSubtitle">Cargo 1 de 6</div>
+                            <h2 class="role-title" id="roleTitle">DEPUTADO FEDERAL</h2>
+                        </div>
+
+                        <!-- Caixas de Dígitos -->
+                        <div class="digit-input-container">
+                            <span class="digit-label">Número:</span>
+                            <div class="digit-boxes" id="digitBoxesContainer">
+                                <!-- Preenchido dinamicamente via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Detalhes do Candidato -->
+                        <div class="candidate-details-layout" id="candidateDetailsLayout" style="display: none;">
+                            <div class="candidate-text-data">
+                                <div class="data-group">
+                                    <div class="data-group-label">Nome:</div>
+                                    <div class="data-group-value" id="candidateName">NOME DO CANDIDATO</div>
+                                </div>
+                                <div class="data-group">
+                                    <div class="data-group-label">Partido:</div>
+                                    <div class="data-group-value" id="candidateParty">PARTIDO — SIGLA</div>
+                                </div>
+
+                                <!-- Vice (Governador / Presidente) -->
+                                <div class="data-group" id="viceGroup" style="display: none;">
+                                    <div class="data-group-label" id="viceTitle">Vice-Presidente:</div>
+                                    <div class="data-group-value small" id="viceName">NOME DO VICE</div>
+                                </div>
+
+                                <!-- Suplentes (Senador) -->
+                                <div class="data-group" id="suplente1Group" style="display: none;">
+                                    <div class="data-group-label">1º Suplente:</div>
+                                    <div class="data-group-value small" id="suplente1Name">NOME DO 1º SUPLENTE</div>
+                                </div>
+                                <div class="data-group" id="suplente2Group" style="display: none;">
+                                    <div class="data-group-label">2º Suplente:</div>
+                                    <div class="data-group-value small" id="suplente2Name">NOME DO 2º SUPLENTE</div>
+                                </div>
+                            </div>
+
+                            <!-- Fotos: Candidato + Vices/Suplentes -->
+                            <div class="candidate-photos-area">
+                                <div class="photo-card-main">
+                                    <img id="candidateMainPhoto" src="" alt="Foto Oficial do Candidato">
+                                    <div class="photo-badge-label">TITULAR</div>
+                                </div>
+
+                                <div class="secondary-photos-grid">
+                                    <!-- Foto Vice -->
+                                    <div class="photo-card-small" id="vicePhotoCard" style="display: none;">
+                                        <img id="vicePhoto" src="" alt="Foto Oficial do Vice">
+                                        <div class="photo-badge-label">VICE</div>
+                                    </div>
+                                    <!-- Foto Suplente 1 -->
+                                    <div class="photo-card-small" id="suplente1PhotoCard" style="display: none;">
+                                        <img id="suplente1Photo" src="" alt="Foto 1º Suplente">
+                                        <div class="photo-badge-label">1º SUPL.</div>
+                                    </div>
+                                    <!-- Foto Suplente 2 -->
+                                    <div class="photo-card-small" id="suplente2PhotoCard" style="display: none;">
+                                        <img id="suplente2Photo" src="" alt="Foto 2º Suplente">
+                                        <div class="photo-badge-label">2º SUPL.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estados Especiais: Voto Branco ou Nulo -->
+                        <div class="state-banner-center" id="stateBannerCenter" style="display: none;">
+                            <h2 class="state-title-large" id="stateTitle">VOTO EM BRANCO</h2>
+                            <p class="state-subtitle" id="stateSubtitle">Aperte VERDE para CONFIRMAR ou LARANJA para REINICIAR</p>
+                        </div>
+
+                        <!-- 10. Mensagem "CONFIRA O SEU VOTO" piscante -->
+                        <div class="confira-voto-banner blink-text" id="confiraVotoBanner" style="display: none;">
+                            CONFIRA O SEU VOTO
+                        </div>
+
+                        <!-- 22. Componente de Libras oficial -->
+                        <div class="libras-container" aria-label="Acessibilidade em Libras">
+                            <div class="libras-header">LIBRAS</div>
+                            <div class="libras-canvas-box">
+                                <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="30" r="16" fill="#38bdf8"/>
+                                    <rect x="36" y="50" width="28" height="42" rx="6" fill="#0284c7"/>
+                                    <!-- Braços animados em Libras -->
+                                    <path d="M 36 58 Q 20 75 30 92" stroke="#38bdf8" stroke-width="6" fill="none" stroke-linecap="round"/>
+                                    <path d="M 64 58 Q 80 75 70 92" stroke="#38bdf8" stroke-width="6" fill="none" stroke-linecap="round"/>
+                                    <!-- Mãos sinalizando -->
+                                    <circle cx="30" cy="94" r="5" fill="#facc15"/>
+                                    <circle cx="70" cy="94" r="5" fill="#facc15"/>
+                                </svg>
+                            </div>
+                            <div class="libras-sign-caption" id="librasCaption">Deputado Federal</div>
+                        </div>
+                    </div>
+
+                    <!-- Rodapé de Instruções Oficiais -->
+                    <footer class="lcd-footer-instructions">
+                        <div class="footer-keys-tip">
+                            Aperte a tecla: <span class="key-green">VERDE</span> para CONFIRMAR este voto | <span class="key-orange">LARANJA</span> para REINICIAR este voto
+                        </div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #64748b;">
+                            ELEIÇÕES 2026
+                        </div>
+                    </footer>
+                </div>
+
+                <!-- 3. TELA FINAL: "FIM" -->
+                <div class="screen-fim-container" id="fimScreen" style="display: none;">
+                    <h1 class="screen-fim-title">FIM</h1>
+                    <div class="screen-fim-voted">VOTOU</div>
+                    <p style="font-size: 1rem; color: #64748b; font-weight: 600;">Retire seu comprovante e aguarde o sinal sonoro.</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts da Urna -->
+    <script src="js/qrcode-lib.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/candidatos.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/urna.js"></script>
+</body>
+</html>
