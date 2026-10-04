@@ -287,12 +287,73 @@ class MesarioController {
     }
 
     encerrarSecaoEleitoral() {
-        this.secaoEncerrada = true;
-        this.addLog('[ENCERRAMENTO] Seção Eleitoral 001 encerrada oficialmente às ' + new Date().toLocaleTimeString(), 'highlight');
-        this.elements.btnLiberar.disabled = true;
-        this.elements.btnEncerrarSecao.disabled = true;
-        this.elements.btnEncerrarSecao.textContent = '🔒 SEÇÃO ENCERRADA';
-        this.gerarBoletimDeUrna();
+        // Se houver votos, gera primeiro o Boletim de Urna (BU) oficial
+        const totalVotosAntes = this.votosRDV.length;
+        if (totalVotosAntes > 0) {
+            this.gerarBoletimDeUrna();
+        }
+
+        // 1. Zera todas as variáveis de controle do Mesário
+        this.votosRDV = [];
+        this.eleitoresHabilitados = 0;
+        this.eleitoresVotaram = 0;
+        this.currentVotingStep = 0;
+        this.votingActive = false;
+        this.secaoEncerrada = false;
+        this.currentCpfValid = false;
+        this.tecladoConectado = false;
+
+        // 2. Limpa todos os campos da interface do Mesário
+        if (this.elements.cpfInput) {
+            this.elements.cpfInput.value = '';
+            this.elements.cpfInput.classList.remove('valid', 'invalid');
+        }
+        if (this.elements.cpfFeedback) {
+            this.elements.cpfFeedback.textContent = 'Digite os 11 dígitos do CPF para validar';
+            this.elements.cpfFeedback.className = 'cpf-validation-feedback';
+        }
+        if (this.elements.voterNameDisplay) {
+            this.elements.voterNameDisplay.textContent = '';
+        }
+        if (this.elements.btnLiberar) {
+            this.elements.btnLiberar.disabled = true;
+        }
+        if (this.elements.currentStepBadge) {
+            this.elements.currentStepBadge.textContent = 'Aguardando Eleitor';
+        }
+        if (this.elements.progressFill) {
+            this.elements.progressFill.style.width = '0%';
+        }
+        if (this.elements.stagePills) {
+            this.elements.stagePills.forEach(p => p.classList.remove('active', 'done'));
+        }
+
+        // 3. Atualiza controles e limpa a tabela do RDV
+        this.updateInterromperButton(false);
+        this.updateTecladoStatus(false);
+        this.renderRDVTable();
+
+        // 4. Registra no Log oficial da Seção
+        this.addLog(`[ENCERRAMENTO E ZERÉSIMA] Seção encerrada com ${totalVotosAntes} votos registrados. Todos os contadores, votos e registros foram ZERADOS e limpos!`, 'alert');
+
+        // 5. Envia sinal de Reset para a Urna e para o Teclado
+        window.UrnaSync.set(`sessions/${this.sessionId}/status`, {
+            phoneConnected: false,
+            votingActive: false,
+            resetSecao: true,
+            timestamp: Date.now()
+        });
+
+        window.UrnaSync.set(`sessions/${this.sessionId}/current_step`, {
+            stepIndex: 0,
+            stepName: 'AGUARDANDO ELEITOR',
+            status: 'IDLE'
+        });
+
+        window.UrnaSync.set(`sessions/${this.sessionId}/vote_completed`, null);
+
+        // Limpa votos do localStorage
+        localStorage.removeItem('urna_sync_sessions/' + this.sessionId + '/vote_completed');
     }
 
     updateTecladoStatus(connected) {

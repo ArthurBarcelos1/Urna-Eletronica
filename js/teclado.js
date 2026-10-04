@@ -187,8 +187,8 @@ class TecladoController {
         });
 
         window.UrnaSync.on(`sessions/${this.sessionId}/status`, (statusData) => {
-            if (statusData && statusData.phoneConnected === false && this.isConnected) {
-                alert('Atenção: O teclado foi desconectado pela Urna ou Terminal do Mesário.');
+            if (statusData && (statusData.phoneConnected === false || statusData.resetSecao) && this.isConnected) {
+                alert('Atenção: A seção eleitoral foi encerrada/zerada ou o teclado foi desconectado.');
                 this.desconectarTeclado();
             }
         });

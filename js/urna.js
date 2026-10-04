@@ -240,6 +240,12 @@ class UrnaController {
                     this.startPairingCountdown();
                 }
             }
+
+            // Comando do Mesário para Encerrar Seção / Zerar e Limpar Tudo
+            if (statusData.resetSecao) {
+                console.log('[Urna] Seção encerrada pelo Mesário. Zerando tudo...');
+                this.resetUrnaTotal();
+            }
         });
 
         // 2. Escuta teclas enviadas pelo celular
@@ -249,6 +255,26 @@ class UrnaController {
             if (keyData.timestamp && Date.now() - keyData.timestamp > 4000) return;
             this.handleKeyPress(keyData.key);
         });
+    }
+
+    resetUrnaTotal() {
+        this.isPhoneConnected = false;
+        this.currentCargoIndex = 0;
+        this.enteredDigits = '';
+        this.voteType = null;
+        this.currentCandidate = null;
+        this.currentLegenda = null;
+        this.senador1Votado = null;
+        this.canConfirm = false;
+        if (this.confirmTimer) clearTimeout(this.confirmTimer);
+        this.currentSessionVotes = {};
+
+        this.setUrnaState('PAIRING');
+        this.generateNewCode();
+        this.startPairingCountdown();
+        if (window.urnaAudio) {
+            window.urnaAudio.playConfirmBeep();
+        }
     }
 
     setUrnaState(state) {
