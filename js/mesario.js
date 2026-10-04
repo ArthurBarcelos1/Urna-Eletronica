@@ -11,6 +11,9 @@ class MesarioController {
         this.eleitoresHabilitados = 0;
         this.eleitoresVotaram = 0;
         this.currentVotingStep = 0;
+        this.tecladoConectado = false;
+        this.votingActive = false;
+        this.secaoEncerrada = false;
     }
 
     init() {
@@ -29,6 +32,10 @@ class MesarioController {
             btnLiberar: document.getElementById('btnLiberar'),
             voterNameDisplay: document.getElementById('voterNameDisplay'),
             quickVotersList: document.getElementById('quickVotersList'),
+            tecladoAlertBox: document.getElementById('tecladoAlertBox'),
+            btnDesconectarTeclado: document.getElementById('btnDesconectarTeclado'),
+            btnInterromperVotacao: document.getElementById('btnInterromperVotacao'),
+            btnEncerrarSecao: document.getElementById('btnEncerrarSecao'),
             
             // Monitor de Votação
             currentStepBadge: document.getElementById('currentStepBadge'),
@@ -82,6 +89,33 @@ class MesarioController {
             });
         }
 
+        // Botão Desconectar Teclado
+        if (this.elements.btnDesconectarTeclado) {
+            this.elements.btnDesconectarTeclado.addEventListener('click', () => {
+                if (confirm('Deseja desconectar o teclado atual da Urna? Um novo código de 30 segundos será gerado na tela da Urna.')) {
+                    this.desconectarTecladoAtual();
+                }
+            });
+        }
+
+        // Botão Finalizar / Cancelar Votação Atual na Cabine
+        if (this.elements.btnInterromperVotacao) {
+            this.elements.btnInterromperVotacao.addEventListener('click', () => {
+                if (confirm('Tem certeza que deseja INTERROMPER e CANCELAR a votação em andamento na cabine?')) {
+                    this.interromperVotacaoAtual();
+                }
+            });
+        }
+
+        // Botão Encerrar Seção Eleitoral
+        if (this.elements.btnEncerrarSecao) {
+            this.elements.btnEncerrarSecao.addEventListener('click', () => {
+                if (confirm('Deseja encerrar definitivamente os trabalhos da Seção Eleitoral 001? Novas votações serão bloqueadas e o Boletim de Urna (BU) será emitido.')) {
+                    this.encerrarSecaoEleitoral();
+                }
+            });
+        }
+
         // Emitir BU
         if (this.elements.btnEmitirBU) {
             this.elements.btnEmitirBU.addEventListener('click', () => {
@@ -104,6 +138,13 @@ class MesarioController {
     }
 
     validateCpfInput(rawDigits) {
+        if (this.secaoEncerrada) {
+            this.elements.cpfFeedback.textContent = '🔒 Seção Eleitoral encerrada. Novas votações não permitidas.';
+            this.elements.cpfFeedback.className = 'cpf-validation-feedback invalid';
+            this.elements.btnLiberar.disabled = true;
+            return;
+        }
+
         if (rawDigits.length === 11) {
             const isValid = window.validarCPF(rawDigits);
             this.currentCpfValid = isValid;
@@ -111,9 +152,23 @@ class MesarioController {
             if (isValid) {
                 this.elements.cpfInput.classList.remove('invalid');
                 this.elements.cpfInput.classList.add('valid');
-                this.elements.cpfFeedback.className = 'cpf-validation-feedback valid';
-                this.elements.cpfFeedback.textContent = '✓ CPF Válido (algoritmo Módulo 11 confirmado)';
-                this.elements.btnLiberar.disabled = false;
+
+                // Verifica se há teclado conectado
+                if (!this.tecladoConectado) {
+                    this.elements.cpfFeedback.className = 'cpf-validation-feedback invalid';
+                    this.elements.cpfFeedback.textContent = '⚠️ CPF válido, porém NÃO HÁ TECLADO CONECTADO à Urna!';
+                    this.elements.btnLiberar.disabled = true;
+                    if (this.elements.tecladoAlertBox) this.elements.tecladoAlertBox.style.display = 'flex';
+                } else if (this.votingActive) {
+                    this.elements.cpfFeedback.className = 'cpf-validation-feedback invalid';
+                    this.elements.cpfFeedback.textContent = '⏳ Cabine ocupada: aguarde a votação atual ser finalizada.';
+                    this.elements.btnLiberar.disabled = true;
+                } else {
+                    this.elements.cpfFeedback.className = 'cpf-validation-feedback valid';
+                    this.elements.cpfFeedback.textContent = '✓ CPF Válido (algoritmo Módulo 11 confirmado)';
+                    this.elements.btnLiberar.disabled = false;
+                    if (this.elements.tecladoAlertBox) this.elements.tecladoAlertBox.style.display = 'none';
+                }
             } else {
                 this.elements.cpfInput.classList.remove('valid');
                 this.elements.cpfInput.classList.add('invalid');
@@ -163,12 +218,21 @@ class MesarioController {
 
     liberarEleitorParaVotar() {
         if (!this.currentCpfValid) return;
+        if (!this.tecladoConectado) {
+            alert('Atenção: Não é possível liberar a votação sem um teclado (celular) conectado à urna!');
+            return;
+        }
+        if (this.votingActive) {
+            alert('Aguarde o eleitor atual concluir a votação na cabine.');
+            return;
+        }
 
         const cpfDigits = this.elements.cpfInput.value.replace(/\D/g, '');
         // Gera hash cego do CPF para log eleitoral sem violar a privacidade
         const cpfHash = this.pseudoHash(cpfDigits);
 
         this.eleitoresHabilitados++;
+        this.votingActive = true;
         this.addLog(`[HABILITAÇÃO] Eleitor habilitado com sucesso. Hash do Título: ${cpfHash}. Liberando terminal...`, 'success');
 
         // Notifica a Urna via Sync
@@ -183,16 +247,109 @@ class MesarioController {
         this.elements.btnLiberar.disabled = true;
         this.elements.cpfFeedback.textContent = 'Eleitor liberado para votar na cabine!';
         this.elements.cpfFeedback.className = 'cpf-validation-feedback valid';
+
+        // Atualiza botão de interrupção
+        this.updateInterromperButton(true);
+    }
+
+    desconectarTecladoAtual() {
+        this.tecladoConectado = false;
+        this.addLog('[TECLADO] Teclado desconectado pelo mesário. Urna retornou ao modo de pareamento.', 'alert');
+        
+        window.UrnaSync.set(`sessions/${this.sessionId}/status`, {
+            phoneConnected: false,
+            votingActive: false,
+            disconnectedAt: Date.now()
+        });
+
+        this.updateTecladoStatus(false);
+    }
+
+    interromperVotacaoAtual() {
+        this.votingActive = false;
+        this.addLog('[INTERRUPÇÃO] Votação em andamento foi cancelada pelo mesário. Terminal liberado.', 'alert');
+        
+        window.UrnaSync.set(`sessions/${this.sessionId}/status`, {
+            phoneConnected: this.tecladoConectado,
+            votingActive: false,
+            forceFinishVoting: true,
+            interruptedAt: Date.now()
+        });
+
+        this.elements.currentStepBadge.textContent = 'Aguardando Eleitor';
+        this.elements.progressFill.style.width = '0%';
+        this.elements.stagePills.forEach(p => p.classList.remove('active', 'done'));
+        this.updateInterromperButton(false);
+        this.elements.cpfFeedback.textContent = 'Terminal da urna liberado para o próximo eleitor.';
+        this.elements.cpfFeedback.className = 'cpf-validation-feedback';
+    }
+
+    encerrarSecaoEleitoral() {
+        this.secaoEncerrada = true;
+        this.addLog('[ENCERRAMENTO] Seção Eleitoral 001 encerrada oficialmente às ' + new Date().toLocaleTimeString(), 'highlight');
+        this.elements.btnLiberar.disabled = true;
+        this.elements.btnEncerrarSecao.disabled = true;
+        this.elements.btnEncerrarSecao.textContent = '🔒 SEÇÃO ENCERRADA';
+        this.gerarBoletimDeUrna();
+    }
+
+    updateTecladoStatus(connected) {
+        this.tecladoConectado = connected;
+        if (connected) {
+            if (this.elements.tecladoConnBadge) {
+                this.elements.tecladoConnBadge.className = 'badge badge-success';
+                this.elements.tecladoConnBadge.textContent = '● Teclado Online';
+            }
+            if (this.elements.btnDesconectarTeclado) {
+                this.elements.btnDesconectarTeclado.style.display = 'inline-block';
+            }
+            if (this.elements.tecladoAlertBox) {
+                this.elements.tecladoAlertBox.style.display = 'none';
+            }
+        } else {
+            if (this.elements.tecladoConnBadge) {
+                this.elements.tecladoConnBadge.className = 'badge badge-danger';
+                this.elements.tecladoConnBadge.textContent = '○ Teclado Desconectado';
+            }
+            if (this.elements.btnDesconectarTeclado) {
+                this.elements.btnDesconectarTeclado.style.display = 'none';
+            }
+            if (this.elements.tecladoAlertBox) {
+                this.elements.tecladoAlertBox.style.display = 'flex';
+            }
+            if (this.elements.btnLiberar) {
+                this.elements.btnLiberar.disabled = true;
+            }
+        }
+    }
+
+    updateInterromperButton(isActive) {
+        if (!this.elements.btnInterromperVotacao) return;
+        if (isActive) {
+            this.elements.btnInterromperVotacao.disabled = false;
+            this.elements.btnInterromperVotacao.style.cursor = 'pointer';
+            this.elements.btnInterromperVotacao.style.opacity = '1';
+        } else {
+            this.elements.btnInterromperVotacao.disabled = true;
+            this.elements.btnInterromperVotacao.style.cursor = 'not-allowed';
+            this.elements.btnInterromperVotacao.style.opacity = '0.5';
+        }
     }
 
     listenUrnaUpdates() {
         // Status da Conexão
         window.UrnaSync.on(`sessions/${this.sessionId}/status`, (statusData) => {
-            if (statusData && statusData.phoneConnected) {
-                if (this.elements.tecladoConnBadge) {
-                    this.elements.tecladoConnBadge.className = 'badge badge-success';
-                    this.elements.tecladoConnBadge.textContent = '● Teclado Online';
-                }
+            if (!statusData) {
+                this.updateTecladoStatus(false);
+                return;
+            }
+
+            const isPhoneOnline = (statusData.phoneConnected === true);
+            this.updateTecladoStatus(isPhoneOnline);
+
+            if (statusData.votingActive !== undefined) {
+                this.votingActive = statusData.votingActive;
+                this.updateInterromperButton(this.votingActive);
             }
         });
 
@@ -215,7 +372,12 @@ class MesarioController {
             });
 
             if (stepData.status === 'VOTING') {
+                this.votingActive = true;
+                this.updateInterromperButton(true);
                 this.addLog(`[ETAPA] Urna em votação: ${stepData.stepName} (${stepIdx}/6)`, 'highlight');
+            } else if (stepData.status === 'FINISHED' || stepData.status === 'IDLE') {
+                this.votingActive = false;
+                this.updateInterromperButton(false);
             }
         });
 
@@ -224,6 +386,8 @@ class MesarioController {
             if (!data || !data.votes) return;
 
             this.eleitoresVotaram++;
+            this.votingActive = false;
+            this.updateInterromperButton(false);
             this.addLog(`[VOTAÇÃO CONCLUÍDA] Voto registrado pelo eleitor. Total de votantes: ${this.eleitoresVotaram}.`, 'success');
             
             // Adiciona os votos no RDV

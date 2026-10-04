@@ -185,10 +185,11 @@ class UrnaController {
     }
 
     listenSyncUpdates() {
-        // 1. Escuta conexão do celular / teclado
+        // 1. Escuta conexão do celular / teclado e comandos do Mesário
         window.UrnaSync.on(`sessions/${this.sessionId}/status`, (statusData) => {
             if (!statusData) return;
 
+            // Teclado conectou
             if (statusData.phoneConnected && !this.isPhoneConnected) {
                 this.isPhoneConnected = true;
                 if (this.pairingTimer) clearInterval(this.pairingTimer);
@@ -199,13 +200,36 @@ class UrnaController {
                 }
             }
 
-            // 2. Escuta comando do Mesário para iniciar votação do eleitor
+            // Teclado foi desconectado (pelo celular ou pelo mesário)
+            if (statusData.phoneConnected === false && this.isPhoneConnected) {
+                this.isPhoneConnected = false;
+                console.log('[Urna] Teclado desconectado.');
+                this.setUrnaState('PAIRING');
+                this.generateNewCode();
+                this.startPairingCountdown();
+            }
+
+            // Comando do Mesário para iniciar votação do eleitor
             if (statusData.votingActive && this.currentStatus !== 'VOTING' && this.currentStatus !== 'FINISHED') {
                 this.startVotingSession();
             }
+
+            // Comando do Mesário para interromper / finalizar votação em andamento
+            if (statusData.forceFinishVoting && this.currentStatus === 'VOTING') {
+                console.log('[Urna] Votação interrompida pelo Mesário.');
+                window.urnaAudio.playErrorBeep();
+                this.resetCurrentCargo();
+                if (this.isPhoneConnected) {
+                    this.setUrnaState('WAITING_MESARIO');
+                } else {
+                    this.setUrnaState('PAIRING');
+                    this.generateNewCode();
+                    this.startPairingCountdown();
+                }
+            }
         });
 
-        // 3. Escuta teclas enviadas pelo celular
+        // 2. Escuta teclas enviadas pelo celular
         window.UrnaSync.on(`sessions/${this.sessionId}/key_pressed`, (keyData) => {
             if (!keyData || !keyData.key) return;
             // Previne comandos repetidos antigos por timestamp

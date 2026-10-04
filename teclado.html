@@ -20,7 +20,12 @@
                 <div class="dot-status" id="statusDot"></div>
                 <span id="statusText">DESCONECTADO</span>
             </div>
-            <div class="session-badge" id="sessionInfo">Aguardando código</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="session-badge" id="sessionInfo">Aguardando código</div>
+                <button type="button" id="btnDesconectarCelular" style="background: none; border: 1px solid #ef4444; border-radius: 6px; padding: 3px 8px; font-size: 0.7rem; color: #fca5a5; cursor: pointer; display: none;">
+                    Desconectar
+                </button>
+            </div>
         </header>
 
         <!-- Etapa Atual da Urna -->

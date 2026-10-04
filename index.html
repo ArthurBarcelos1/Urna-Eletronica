@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +39,6 @@
             font-size: 2.8rem;
             font-weight: 900;
             background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-            -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.02em;
         }
@@ -93,9 +93,20 @@
             font-size: 1.8rem;
         }
 
-        .icon-urna { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); }
-        .icon-teclado { background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); }
-        .icon-mesario { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .icon-urna {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .icon-teclado {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .icon-mesario {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
 
         .module-card h3 {
             font-size: 1.35rem;
@@ -177,20 +188,23 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="hub-container">
-        
+
         <!-- Header / Hero -->
         <header class="hub-hero">
             <div class="hub-badge">PROJETO DE ESTUDO & SIMULADOR ELEITORAL</div>
             <h1 class="hub-title">Urna Eletrônica Brasileira 2026</h1>
             <p class="hub-subtitle">
                 Recriação hiper-fiel das Eleições Gerais de 2026 com as 3 telas sincronizadas em tempo real:
-                Visor LCD Oficial da Urna, Teclado Físico Virtual no Celular e Terminal do Mesário com Embaralhamento Criptográfico do RDV.
+                Visor LCD Oficial da Urna, Teclado Físico Virtual no Celular e Terminal do Mesário com Embaralhamento
+                Criptográfico do RDV.
             </p>
             <div style="margin-top: 10px;">
-                <a href="simulador.html" class="btn-launch" style="background: linear-gradient(135deg, #2563eb, #10b981); padding: 14px 28px; font-size: 1.05rem;">
+                <a href="simulador.html" class="btn-launch"
+                    style="background: linear-gradient(135deg, #2563eb, #10b981); padding: 14px 28px; font-size: 1.05rem;">
                     🚀 ABRIR SIMULADOR COMPLETO 3 EM 1 (TUDO NA MESMA TELA)
                 </a>
             </div>
@@ -198,13 +212,14 @@
 
         <!-- As 3 Telas do Sistema -->
         <div class="cards-grid">
-            
+
             <!-- Card 1: Visor da Urna -->
             <div class="module-card">
                 <div class="module-icon-wrap icon-urna">🖥️</div>
                 <h3>1. Visor LCD da Urna</h3>
                 <p>
-                    Tela oficial das Eleições 2026 para o eleitor. Interface clara de alto contraste com tipografia Atkinson Hyperlegible.
+                    Tela oficial das Eleições 2026 para o eleitor. Interface clara de alto contraste com tipografia
+                    Atkinson Hyperlegible.
                 </p>
                 <ul class="features-bullet-list">
                     <li>Barra de progresso fixa superior de 2026</li>
@@ -270,19 +285,22 @@
                 <span>🔥</span> Conectividade em Tempo Real & Firebase Realtime Database
             </h4>
             <p style="font-size: 0.9rem; color: #94a3b8; line-height: 1.6;">
-                O projeto está integrado à sua instância oficial do Firebase (<code>projeto-urna-eletronica</code>). O sistema conta com uma <strong>arquitetura dual ultra-resiliente</strong>:
+                O projeto está integrado à sua instância oficial do Firebase (<code>projeto-urna-eletronica</code>). O
+                sistema conta com uma <strong>arquitetura dual ultra-resiliente</strong>:
             </p>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px;">
                 <div style="background: #030712; padding: 16px; border-radius: 12px; border: 1px solid #1f2937;">
                     <strong style="color: #4ade80;">1. Modo Sincronizado Imediato (Ativo)</strong>
                     <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 6px;">
-                        Funciona instantaneamente entre abas ou janelas abertas no mesmo navegador ou rede local, permitindo que você teste imediatamente todas as telas mesmo sem alterar nada no Firebase.
+                        Funciona instantaneamente entre abas ou janelas abertas no mesmo navegador ou rede local,
+                        permitindo que você teste imediatamente todas as telas mesmo sem alterar nada no Firebase.
                     </p>
                 </div>
                 <div style="background: #030712; padding: 16px; border-radius: 12px; border: 1px solid #1f2937;">
                     <strong style="color: #60a5fa;">2. Modo Nuvem Externa (Firebase Realtime Database)</strong>
                     <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 6px;">
-                        Para conectar o celular através de 4G/redes externas, basta alterar as regras de segurança no Firebase Console para leitura e escrita:
+                        Para conectar o celular através de 4G/redes externas, basta alterar as regras de segurança no
+                        Firebase Console para leitura e escrita:
                     </p>
                     <pre class="code-block" style="margin-top: 8px;">{
   "rules": {
@@ -299,7 +317,8 @@
             <h4>
                 <span>🗳️</span> Ordem Oficial das Eleições Gerais de 2026
             </h4>
-            <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 8px; text-align: center;">
+            <div
+                style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 8px; text-align: center;">
                 <div style="background: #1e293b; padding: 12px 8px; border-radius: 10px;">
                     <span style="font-size: 0.75rem; color: #60a5fa; font-weight: 800;">1º CARGO</span>
                     <p style="font-size: 0.85rem; font-weight: 700; margin-top: 4px;">Deputado Federal</p>
@@ -336,4 +355,5 @@
     </div>
 
 </body>
+
 </html>

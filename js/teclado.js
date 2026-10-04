@@ -23,6 +23,7 @@ class TecladoController {
             tecladoFrame: document.getElementById('tecladoFrame'),
             inputPairingCode: document.getElementById('inputPairingCode'),
             btnConnectCode: document.getElementById('btnConnectCode'),
+            btnDesconectarCelular: document.getElementById('btnDesconectarCelular'),
             statusDot: document.getElementById('statusDot'),
             statusText: document.getElementById('statusText'),
             sessionInfo: document.getElementById('sessionInfo'),
@@ -78,6 +79,15 @@ class TecladoController {
             });
         }
 
+        // Botão Desconectar Celular
+        if (this.elements.btnDesconectarCelular) {
+            this.elements.btnDesconectarCelular.addEventListener('click', () => {
+                if (confirm('Deseja desconectar este celular da Urna?')) {
+                    this.desconectarTeclado();
+                }
+            });
+        }
+
         // Teclas do Teclado Numérico
         const keys = document.querySelectorAll('.key-btn');
         keys.forEach(btn => {
@@ -90,6 +100,32 @@ class TecladoController {
             };
             btn.addEventListener('pointerdown', handlePress);
         });
+    }
+
+    desconectarTeclado() {
+        this.isConnected = false;
+        localStorage.removeItem('teclado_saved_session');
+        localStorage.removeItem('teclado_saved_code');
+
+        if (this.sessionId) {
+            window.UrnaSync.set(`sessions/${this.sessionId}/status`, {
+                phoneConnected: false,
+                votingActive: false,
+                disconnectedAt: Date.now()
+            });
+        }
+
+        this.elements.tecladoFrame.style.display = 'none';
+        this.elements.connectScreen.style.display = 'flex';
+        this.elements.statusDot.classList.remove('online');
+        this.elements.statusText.textContent = 'DESCONECTADO';
+        this.elements.sessionInfo.textContent = 'Aguardando código';
+        if (this.elements.btnDesconectarCelular) {
+            this.elements.btnDesconectarCelular.style.display = 'none';
+        }
+        if (this.elements.currentStepDisplay) {
+            this.elements.currentStepDisplay.textContent = 'Conecte o teclado para iniciar';
+        }
     }
 
     async attemptPairingByCode(code) {
@@ -139,11 +175,21 @@ class TecladoController {
         this.elements.statusDot.classList.add('online');
         this.elements.statusText.textContent = 'CONECTADO À URNA';
         this.elements.sessionInfo.textContent = `ID: ${code || sessionId.substring(0, 10)}`;
+        if (this.elements.btnDesconectarCelular) {
+            this.elements.btnDesconectarCelular.style.display = 'inline-block';
+        }
 
-        // Escuta atualizações de etapas da votação
+        // Escuta atualizações de etapas da votação e status da urna
         window.UrnaSync.on(`sessions/${this.sessionId}/current_step`, (stepData) => {
             if (stepData && this.elements.currentStepDisplay) {
                 this.elements.currentStepDisplay.textContent = stepData.stepName || 'Pronto para votar';
+            }
+        });
+
+        window.UrnaSync.on(`sessions/${this.sessionId}/status`, (statusData) => {
+            if (statusData && statusData.phoneConnected === false && this.isConnected) {
+                alert('Atenção: O teclado foi desconectado pela Urna ou Terminal do Mesário.');
+                this.desconectarTeclado();
             }
         });
     }

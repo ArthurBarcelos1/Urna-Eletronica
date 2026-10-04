@@ -24,9 +24,12 @@
                 </div>
             </div>
 
-            <div class="system-status-indicators">
+            <div class="system-status-indicators" style="display: flex; align-items: center; gap: 10px;">
                 <span class="badge badge-success" id="urnaConnBadge">● Urna Conectada</span>
-                <span class="badge badge-warning" id="tecladoConnBadge">○ Teclado Aguardando</span>
+                <span class="badge badge-warning" id="tecladoConnBadge">○ Teclado Desconectado</span>
+                <button type="button" id="btnDesconectarTeclado" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; background: #374151; display: none;">
+                    🔌 Desconectar Teclado
+                </button>
             </div>
         </header>
 
@@ -43,6 +46,12 @@
                             <span>👤</span> Identificação do Eleitor
                         </h2>
                         <span class="badge badge-info">Obrigatório</span>
+                    </div>
+
+                    <!-- Alerta de Teclado Desconectado -->
+                    <div id="tecladoAlertBox" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.5); border-radius: 8px; padding: 10px 14px; font-size: 0.85rem; color: #fca5a5; display: flex; align-items: center; gap: 8px;">
+                        <span>⚠️</span>
+                        <span><strong>Nenhum teclado conectado à Urna!</strong> Conecte um celular antes de liberar o eleitor.</span>
                     </div>
 
                     <div class="cpf-form-group">
@@ -100,8 +109,15 @@
                             <div class="stage-pill" data-step="6">6. Pres.</div>
                         </div>
                     </div>
+
+                    <!-- Botão para Finalizar / Interromper Votação pelo Mesário -->
+                    <div style="margin-top: 10px;">
+                        <button type="button" id="btnInterromperVotacao" class="btn-secondary" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; width: 100%; padding: 10px; font-size: 0.85rem; font-weight: 700; cursor: not-allowed; opacity: 0.5;" disabled>
+                            🛑 Finalizar / Cancelar Votação na Cabine
+                        </button>
+                    </div>
                     
-                    <p style="font-size: 0.75rem; color: #64748b; line-height: 1.4;">
+                    <p style="font-size: 0.75rem; color: #64748b; line-height: 1.4; margin-top: 6px;">
                         * O terminal do mesário monitora exclusivamente o progresso temporal das etapas, preservando inviolável o sigilo do voto do cidadão conforme a Constituição Federal.
                     </p>
                 </section>
@@ -163,6 +179,9 @@
                     </div>
 
                     <div class="mesario-actions-bar">
+                        <button type="button" class="btn-secondary" id="btnEncerrarSecao" style="background: #991b1b; border-color: #ef4444; color: #fff;">
+                            🔒 ENCERRAR SEÇÃO ELEITORAL
+                        </button>
                         <button type="button" class="btn-primary" id="btnEmitirBU">
                             📄 EMITIR BOLETIM DE URNA (BU)
                         </button>
