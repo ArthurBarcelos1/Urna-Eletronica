@@ -41,6 +41,7 @@ class UrnaController {
             waitingScreen: document.getElementById('waitingScreen'),
             votingScreen: document.getElementById('votingScreen'),
             fimScreen: document.getElementById('fimScreen'),
+            secaoEncerradaScreen: document.getElementById('secaoEncerradaScreen'),
             pairingCard: document.getElementById('pairingCard'),
             mesarioWaitingCard: document.getElementById('mesarioWaitingCard'),
             pairingCodeText: document.getElementById('pairingCodeText'),
@@ -241,9 +242,15 @@ class UrnaController {
                 }
             }
 
-            // Comando do Mesário para Encerrar Seção / Zerar e Limpar Tudo
+            // Comando do Mesário para Encerrar Seção (não zera, trava com mensagem oficial)
+            if (statusData.secaoEncerrada) {
+                console.log('[Urna] Seção encerrada oficialmente pelo Mesário.');
+                this.setUrnaState('SECAO_ENCERRADA');
+            }
+
+            // Comando do Mesário para Reiniciar Seção (zerar tudo para nova eleição)
             if (statusData.resetSecao) {
-                console.log('[Urna] Seção encerrada pelo Mesário. Zerando tudo...');
+                console.log('[Urna] Seção reiniciada e zerada pelo Mesário.');
                 this.resetUrnaTotal();
             }
         });
@@ -281,6 +288,11 @@ class UrnaController {
         this.currentStatus = state;
         console.log('[Urna State]', state);
 
+        // Oculta tela de seção encerrada por padrão
+        if (this.elements.secaoEncerradaScreen) {
+            this.elements.secaoEncerradaScreen.style.display = 'none';
+        }
+
         if (state === 'PAIRING') {
             this.elements.waitingScreen.style.display = 'flex';
             this.elements.votingScreen.style.display = 'none';
@@ -308,6 +320,13 @@ class UrnaController {
             this.elements.waitingScreen.style.display = 'none';
             this.elements.votingScreen.style.display = 'none';
             this.elements.fimScreen.style.display = 'flex';
+        } else if (state === 'SECAO_ENCERRADA') {
+            this.elements.waitingScreen.style.display = 'none';
+            this.elements.votingScreen.style.display = 'none';
+            this.elements.fimScreen.style.display = 'none';
+            if (this.elements.secaoEncerradaScreen) {
+                this.elements.secaoEncerradaScreen.style.display = 'flex';
+            }
         }
     }
 

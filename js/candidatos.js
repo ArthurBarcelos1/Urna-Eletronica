@@ -368,6 +368,111 @@ const CANDIDATOS_DATABASE = {
     ]
 };
 
+// Analisador do Arquivo CSV da Pasta carregamento/
+function parseCandidatosCSV(csvText) {
+    if (!csvText) return;
+    const lines = csvText.trim().split(/\r?\n/);
+    if (lines.length <= 1) return;
+
+    // Reinicia ou limpa as listas para carregar do CSV
+    const newDb = {
+        'deputado_federal': [],
+        'deputado_estadual': [],
+        'senador': [],
+        'governador': [],
+        'presidente': []
+    };
+
+    // Pula o cabeçalho (cargo,partido,nome,numero,foto)
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        // Parse simples respeitando vírgulas
+        const cols = [];
+        let cur = '';
+        let inQuotes = false;
+        for (let c = 0; c < line.length; c++) {
+            const char = line[c];
+            if (char === '"') {
+                inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+                cols.push(cur.trim());
+                cur = '';
+            } else {
+                cur += char;
+            }
+        }
+        cols.push(cur.trim());
+
+        const [cargoRaw, partido, nome, numero, fotoUrl] = cols;
+        if (!cargoRaw || !numero || !nome) continue;
+
+        const cargo = cargoRaw.toLowerCase();
+        const fotoFinal = (fotoUrl && fotoUrl.length > 5) ? fotoUrl : generateCandidateAvatar(nome);
+
+        const candObj = {
+            numero: String(numero).trim(),
+            nome: nome.toUpperCase().trim(),
+            partido: partido ? partido.trim() : 'PARTIDO INDEPENDENTE',
+            foto: fotoFinal
+        };
+
+        if (cargo === 'deputado_federal') {
+            candObj.legendaNumero = candObj.numero.substring(0, 2);
+            newDb['deputado_federal'].push(candObj);
+        } else if (cargo === 'deputado_estadual' || cargo === 'deputado_distrital') {
+            candObj.legendaNumero = candObj.numero.substring(0, 2);
+            newDb['deputado_estadual'].push(candObj);
+        } else if (cargo === 'senador' || cargo === 'senador_1' || cargo === 'senador_2') {
+            candObj.suplente1 = {
+                nome: '1º SUPLENTE DE ' + candObj.nome.split(' ')[0],
+                foto: generateCandidateAvatar('1º Suplente')
+            };
+            candObj.suplente2 = {
+                nome: '2º SUPLENTE DE ' + candObj.nome.split(' ')[0],
+                foto: generateCandidateAvatar('2º Suplente')
+            };
+            newDb['senador'].push(candObj);
+        } else if (cargo === 'governador') {
+            candObj.vice = {
+                nome: 'VICE-GOVERNADOR(A)',
+                foto: generateCandidateAvatar('Vice Governador')
+            };
+            newDb['governador'].push(candObj);
+        } else if (cargo === 'presidente') {
+            candObj.vice = {
+                nome: 'VICE-PRESIDENTE DA REPÚBLICA',
+                foto: generateCandidateAvatar('Vice Presidente')
+            };
+            newDb['presidente'].push(candObj);
+        }
+    }
+
+    // Mescla / atualiza no banco global
+    Object.keys(newDb).forEach(k => {
+        if (newDb[k].length > 0) {
+            CANDIDATOS_DATABASE[k] = newDb[k];
+        }
+    });
+
+    console.log('[Carregamento CSV] Candidatos carregados da pasta carregamento com sucesso!', CANDIDATOS_DATABASE);
+}
+
+// Carrega automaticamente o arquivo CSV da pasta carregamento se disponível
+async function autoLoadCandidatosCSV() {
+    try {
+        const res = await fetch('carregamento/candidatos.csv');
+        if (res.ok) {
+            const csvData = await res.text();
+            parseCandidatosCSV(csvData);
+        }
+    } catch (e) {
+        console.log('[Carregamento] CSV carregado com dados locais integrados.');
+    }
+}
+autoLoadCandidatosCSV();
+
 // Funções auxiliares de busca
 function findCandidato(cargoId, numero) {
     if (!numero) return null;
@@ -389,5 +494,7 @@ function findLegenda(cargoId, numeroLegenda) {
 window.CARGOS_ELEICAO_2026 = CARGOS_ELEICAO_2026;
 window.PARTIDOS = PARTIDOS;
 window.CANDIDATOS_DATABASE = CANDIDATOS_DATABASE;
+window.parseCandidatosCSV = parseCandidatosCSV;
 window.findCandidato = findCandidato;
 window.findLegenda = findLegenda;
+
