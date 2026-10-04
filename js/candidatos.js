@@ -432,10 +432,13 @@ function parseCandidatosCSV(csvText) {
     const newDb = {
         'deputado_federal': [],
         'deputado_estadual': [],
-        'senador': [],
+        'senador_1': [],
+        'senador_2': [],
         'governador': [],
         'presidente': []
     };
+    const lastCandidateByTicket = {};
+    const newParties = {};
 
     // Pula o cabeçalho (cargo,partido,nome,numero,foto)
     for (let i = 1; i < lines.length; i++) {
@@ -463,53 +466,55 @@ function parseCandidatosCSV(csvText) {
         if (!cargoRaw || !numero || !nome) continue;
 
         const cargo = cargoRaw.toLowerCase();
-        const fotoFinal = (fotoUrl && fotoUrl.length > 5) ? fotoUrl : generateCandidateAvatar(nome);
+        const targetCargo = cargo === 'deputado_distrital' ? 'deputado_estadual' : cargo;
+        if (!newDb[targetCargo]) continue;
+        const rowPhoto = fotoUrl && fotoUrl.length > 5 ? fotoUrl : generateCandidateAvatar(nome);
 
-        const candObj = {
-            numero: String(numero).trim(),
-            nome: nome.toUpperCase().trim(),
-            partido: partido ? partido.trim() : 'PARTIDO INDEPENDENTE',
-            foto: fotoFinal
-        };
+        if (/^\d+$/.test(numero)) {
+            const candObj = {
+                numero: String(numero),
+                nome: nome.trim(),
+                partido: partido ? partido.trim() : 'PARTIDO INDEPENDENTE',
+                foto: rowPhoto
+            };
 
-        if (cargo === 'deputado_federal') {
-            candObj.legendaNumero = candObj.numero.substring(0, 2);
-            newDb['deputado_federal'].push(candObj);
-        } else if (cargo === 'deputado_estadual' || cargo === 'deputado_distrital') {
-            candObj.legendaNumero = candObj.numero.substring(0, 2);
-            newDb['deputado_estadual'].push(candObj);
-        } else if (cargo === 'senador' || cargo === 'senador_1' || cargo === 'senador_2') {
-            candObj.suplente1 = {
-                nome: '1º SUPLENTE DE ' + candObj.nome.split(' ')[0],
-                foto: generateCandidateAvatar('1º Suplente')
-            };
-            candObj.suplente2 = {
-                nome: '2º SUPLENTE DE ' + candObj.nome.split(' ')[0],
-                foto: generateCandidateAvatar('2º Suplente')
-            };
-            newDb['senador'].push(candObj);
-        } else if (cargo === 'governador') {
-            candObj.vice = {
-                nome: 'VICE-GOVERNADOR(A)',
-                foto: generateCandidateAvatar('Vice Governador')
-            };
-            newDb['governador'].push(candObj);
-        } else if (cargo === 'presidente') {
-            candObj.vice = {
-                nome: 'VICE-PRESIDENTE DA REPÚBLICA',
-                foto: generateCandidateAvatar('Vice Presidente')
-            };
-            newDb['presidente'].push(candObj);
+            if (targetCargo === 'deputado_federal' || targetCargo === 'deputado_estadual') {
+                candObj.legendaNumero = candObj.numero.substring(0, 2);
+                if (!newParties[candObj.legendaNumero]) {
+                    newParties[candObj.legendaNumero] = {
+                        numero: candObj.legendaNumero,
+                        sigla: candObj.legendaNumero,
+                        nome: candObj.partido
+                    };
+                }
+            } else if (targetCargo.startsWith('senador_')) {
+                candObj.suplente1 = {};
+                candObj.suplente2 = {};
+            } else if (targetCargo === 'governador' || targetCargo === 'presidente') {
+                candObj.vice = {};
+            }
+
+            newDb[targetCargo].push(candObj);
+            lastCandidateByTicket[`${targetCargo}|${candObj.partido}`] = candObj;
+        } else {
+            const candidate = lastCandidateByTicket[`${targetCargo}|${partido.trim()}`];
+            if (!candidate) continue;
+
+            if (targetCargo.startsWith('senador_')) {
+                const slot = numero.toLowerCase().includes('primeiro') || numero.toLowerCase().includes('1º') ? 'suplente1' : 'suplente2';
+                candidate[slot] = { nome: nome.trim(), foto: rowPhoto };
+            } else if (targetCargo === 'governador' || targetCargo === 'presidente') {
+                candidate.vice = { nome: nome.trim(), foto: rowPhoto };
+            }
         }
     }
 
     // Mescla / atualiza no banco global
     Object.keys(newDb).forEach(k => {
-        if (newDb[k].length > 0) {
-            CANDIDATOS_DATABASE[k] = newDb[k];
-        }
+        CANDIDATOS_DATABASE[k] = newDb[k];
     });
-    applyTestModelNames(CANDIDATOS_DATABASE);
+    Object.keys(PARTIDOS).forEach(numero => delete PARTIDOS[numero]);
+    Object.assign(PARTIDOS, newParties);
 
     console.log('[Carregamento CSV] Candidatos carregados da pasta carregamento com sucesso!', CANDIDATOS_DATABASE);
 }
@@ -534,8 +539,9 @@ function findCandidato(cargoId, numero) {
     const normalizedNumber = String(numero).replace(/\D/g, '');
     if (!normalizedNumber) return null;
     
-    // Tratamento para senador (1ª e 2ª vaga usam a mesma lista)
-    const dbKey = (cargoId === 'senador_1' || cargoId === 'senador_2') ? 'senador' : cargoId;
+    const dbKey = (cargoId === 'senador_1' || cargoId === 'senador_2')
+        ? (CANDIDATOS_DATABASE[cargoId]?.length ? cargoId : 'senador')
+        : cargoId;
     const lista = CANDIDATOS_DATABASE[dbKey] || [];
     
     return lista.find(c => String(c.numero).replace(/\D/g, '') === normalizedNumber) || null;

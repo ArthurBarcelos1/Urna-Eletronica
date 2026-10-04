@@ -57,7 +57,7 @@ class UrnaAudio {
      */
     playKeyBeep() {
         if (!this.soundEnabled) return;
-        this.playAudioFile('confirm.mpeg', 1, () => this.playKeyBeepFallback());
+        this.playAudioFile('confirm.mpeg', 0.5, () => this.playKeyBeepFallback());
     }
 
     playKeyBeepFallback() {
