@@ -165,6 +165,13 @@ class UrnaController {
             sessionId: this.sessionId,
             timestamp: Date.now()
         });
+
+        // Publica para o terminal do Mesário poder exibir o código atualizado a cada 30 segundos
+        window.UrnaSync.set(`sessions/${this.sessionId}/active_pairing_code`, {
+            code: this.pairingCode,
+            timeLeft: this.timeLeftToRefresh,
+            timestamp: Date.now()
+        });
     }
 
     startPairingCountdown() {
@@ -178,6 +185,12 @@ class UrnaController {
             if (this.elements.timerSeconds) {
                 this.elements.timerSeconds.textContent = this.timeLeftToRefresh;
             }
+
+            // Sincroniza o contador regressivo com o Mesário a cada segundo
+            window.UrnaSync.set(`sessions/${this.sessionId}/pairing_timer`, {
+                timeLeft: this.timeLeftToRefresh
+            });
+
             if (this.timeLeftToRefresh <= 0) {
                 this.generateNewCode();
             }

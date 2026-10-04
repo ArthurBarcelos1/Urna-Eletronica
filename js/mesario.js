@@ -33,6 +33,8 @@ class MesarioController {
             voterNameDisplay: document.getElementById('voterNameDisplay'),
             quickVotersList: document.getElementById('quickVotersList'),
             tecladoAlertBox: document.getElementById('tecladoAlertBox'),
+            mesarioPairingCode: document.getElementById('mesarioPairingCode'),
+            mesarioTimerCount: document.getElementById('mesarioTimerCount'),
             btnDesconectarTeclado: document.getElementById('btnDesconectarTeclado'),
             btnInterromperVotacao: document.getElementById('btnInterromperVotacao'),
             btnEncerrarSecao: document.getElementById('btnEncerrarSecao'),
