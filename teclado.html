@@ -31,21 +31,17 @@
 
         <!-- 1. TELA DE CONEXÃO / DIGITAÇÃO DE CÓDIGO -->
         <div class="teclado-connect-screen" id="connectScreen">
-            <h2>Parear com a Urna</h2>
-            <p>Digite o código de 12 dígitos exibido na tela da Urna ou aponte a câmera para o QR Code:</p>
+            <h2>Teclado Eleitoral</h2>
+            <p>
+                Para conectar automaticamente, basta apontar a <strong>câmera padrão</strong> do seu celular para o QR Code na tela da Urna.
+            </p>
+            <p style="font-size: 0.8rem; color: #64748b;">
+                Ou digite manualmente o código de 12 dígitos:
+            </p>
 
             <input type="text" class="input-code-field" id="inputPairingCode" placeholder="0000-0000-0000" maxlength="14">
 
             <button type="button" class="btn-connect-action" id="btnConnectCode">CONECTAR TECLADO</button>
-            
-            <button type="button" class="btn-connect-action" id="btnScanQR" style="background: #334155; margin-top: -6px;">
-                📷 Ler QR Code com a Câmera
-            </button>
-
-            <!-- Container do Vídeo da Câmera -->
-            <div class="scanner-video-box" id="cameraContainer">
-                <video id="scannerVideo" playsinline></video>
-            </div>
         </div>
 
         <!-- 2. TECLADO MECÂNICO OFICIAL (Exibido após conectar) -->

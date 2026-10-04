@@ -23,8 +23,6 @@ class TecladoController {
             tecladoFrame: document.getElementById('tecladoFrame'),
             inputPairingCode: document.getElementById('inputPairingCode'),
             btnConnectCode: document.getElementById('btnConnectCode'),
-            btnScanQR: document.getElementById('btnScanQR'),
-            cameraContainer: document.getElementById('cameraContainer'),
             statusDot: document.getElementById('statusDot'),
             statusText: document.getElementById('statusText'),
             sessionInfo: document.getElementById('sessionInfo'),
@@ -37,6 +35,7 @@ class TecladoController {
         const code = params.get('code');
         const session = params.get('session');
 
+        // Se veio pela câmera nativa do celular lendo o QR Code:
         if (code && session) {
             this.sessionId = session;
             this.pairingCode = code;
@@ -67,7 +66,7 @@ class TecladoController {
             });
         }
 
-        // Botão de conexão por código
+        // Botão de conexão por código manual
         if (this.elements.btnConnectCode) {
             this.elements.btnConnectCode.addEventListener('click', () => {
                 const code = this.elements.inputPairingCode.value.trim();
@@ -76,13 +75,6 @@ class TecladoController {
                 } else {
                     alert('Por favor, digite o código completo de 12 dígitos (formato: ####-####-####).');
                 }
-            });
-        }
-
-        // Botão de ler QR Code com câmera
-        if (this.elements.btnScanQR) {
-            this.elements.btnScanQR.addEventListener('click', () => {
-                this.startCameraScanner();
             });
         }
 
@@ -182,47 +174,6 @@ class TecladoController {
             key: key,
             timestamp: Date.now()
         });
-    }
-
-    startCameraScanner() {
-        // Leitor de câmera via BarcodeDetector API nativa moderna ou aviso de permissão
-        if ('BarcodeDetector' in window) {
-            const barcodeDetector = new BarcodeDetector({ formats: ['qr_code'] });
-            this.elements.cameraContainer.style.display = 'block';
-            const video = document.getElementById('scannerVideo');
-
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                .then(stream => {
-                    video.srcObject = stream;
-                    video.play();
-
-                    const detectInterval = setInterval(async () => {
-                        try {
-                            const barcodes = await barcodeDetector.detect(video);
-                            if (barcodes.length > 0) {
-                                const rawValue = barcodes[0].rawValue;
-                                clearInterval(detectInterval);
-                                stream.getTracks().forEach(track => track.stop());
-                                this.elements.cameraContainer.style.display = 'none';
-
-                                // Extrai código da URL
-                                const url = new URL(rawValue);
-                                const code = url.searchParams.get('code');
-                                const session = url.searchParams.get('session');
-                                if (code && session) {
-                                    this.connectToSession(session, code);
-                                }
-                            }
-                        } catch (e) {}
-                    }, 300);
-                })
-                .catch(err => {
-                    alert('Não foi possível acessar a câmera. Você pode digitar o código de 12 dígitos que aparece na tela da Urna.');
-                    this.elements.cameraContainer.style.display = 'none';
-                });
-        } else {
-            alert('Seu navegador não possui scanner embutido de QR Code. Por favor, digite o código de 12 dígitos exibido na tela da Urna.');
-        }
     }
 }
 

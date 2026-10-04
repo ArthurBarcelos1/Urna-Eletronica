@@ -22,9 +22,9 @@ class UrnaController {
         this.canConfirm = false;
         this.confirmTimer = null;
         
-        // Timer de Pareamento (15s)
+        // Timer de Pareamento (30s)
         this.pairingTimer = null;
-        this.timeLeftToRefresh = 15;
+        this.timeLeftToRefresh = 30;
 
         // Votos da sessão atual para envio ao RDV
         this.currentSessionVotes = {};
@@ -46,6 +46,8 @@ class UrnaController {
             pairingCodeText: document.getElementById('pairingCodeText'),
             qrCanvas: document.getElementById('qrCanvas'),
             timerSeconds: document.getElementById('timerSeconds'),
+            btnConfigHost: document.getElementById('btnConfigHost'),
+            customHostDisplay: document.getElementById('customHostDisplay'),
             
             // Timeline
             timelineSteps: document.querySelectorAll('.timeline-step'),
@@ -87,6 +89,22 @@ class UrnaController {
             // Libras
             librasCaption: document.getElementById('librasCaption')
         };
+
+        // Permite ao usuário definir o IP da máquina na rede local caso queira ler com a câmera nativa do celular
+        if (this.elements.btnConfigHost) {
+            this.elements.btnConfigHost.addEventListener('click', () => {
+                const current = localStorage.getItem('urna_custom_host') || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && window.location.protocol !== 'file:' ? window.location.host : '192.168.1.100:5500');
+                const newHost = prompt('Digite o IP local ou endereço do servidor para a câmera do celular abrir (ex: 192.168.0.15:5500 ou meusite.com):', current);
+                if (newHost !== null) {
+                    if (newHost.trim() === '') {
+                        localStorage.removeItem('urna_custom_host');
+                    } else {
+                        localStorage.setItem('urna_custom_host', newHost.trim().replace(/^https?:\/\//, ''));
+                    }
+                    this.generateNewCode();
+                }
+            });
+        }
     }
 
     setupPairingSession() {
@@ -104,15 +122,39 @@ class UrnaController {
 
     generateNewCode() {
         this.pairingCode = window.generatePairingCode();
-        this.timeLeftToRefresh = 15;
+        this.timeLeftToRefresh = 30; // 30 segundos
         
         if (this.elements.pairingCodeText) {
             this.elements.pairingCodeText.textContent = this.pairingCode;
         }
+        if (this.elements.timerSeconds) {
+            this.elements.timerSeconds.textContent = this.timeLeftToRefresh;
+        }
 
-        // URL para pareamento direto pelo celular
-        const hostUrl = window.location.origin + window.location.pathname.replace('urna.html', 'teclado.html');
-        const pairingUrl = `${hostUrl}?code=${this.pairingCode}&session=${this.sessionId}`;
+        // Monta a URL completa para que a câmera padrão de qualquer celular (iOS / Android)
+        // abra imediatamente a página do teclado com o código preenchido!
+        let pairingUrl;
+        const customHost = localStorage.getItem('urna_custom_host');
+
+        if (customHost) {
+            const proto = customHost.includes('localhost') || customHost.includes(':') ? 'http' : 'https';
+            pairingUrl = `${proto}://${customHost}/teclado.html?code=${this.pairingCode}&session=${this.sessionId}`;
+            if (this.elements.customHostDisplay) {
+                this.elements.customHostDisplay.textContent = `Host: ${customHost}`;
+            }
+        } else if (window.location.protocol !== 'file:') {
+            const hostUrl = window.location.origin + window.location.pathname.replace('urna.html', 'teclado.html');
+            pairingUrl = `${hostUrl}?code=${this.pairingCode}&session=${this.sessionId}`;
+            if (this.elements.customHostDisplay) {
+                this.elements.customHostDisplay.textContent = `Host: ${window.location.host}`;
+            }
+        } else {
+            // Em caso de abertura direta de arquivo file://
+            pairingUrl = `teclado.html?code=${this.pairingCode}&session=${this.sessionId}`;
+            if (this.elements.customHostDisplay) {
+                this.elements.customHostDisplay.textContent = `Aberto via arquivo local (configure o IP Wi-Fi se for usar outro aparelho)`;
+            }
+        }
 
         if (this.elements.qrCanvas && window.QRCodeLib) {
             window.QRCodeLib.renderToCanvas(this.elements.qrCanvas, pairingUrl, 160);

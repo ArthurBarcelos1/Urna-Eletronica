@@ -47,12 +47,18 @@
                         </div>
                         <div class="pairing-info">
                             <span class="badge badge-info">Conexão do Teclado (Celular)</span>
-                            <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a;">Aponte a câmera do celular</h2>
-                            <p style="font-size: 0.9rem; color: #475569;">Ou digite o código de 12 dígitos no teclado do celular:</p>
+                            <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a;">Aponte a câmera padrão do celular</h2>
+                            <p style="font-size: 0.9rem; color: #475569;">
+                                A câmera nativa do iPhone/Android abrirá o teclado conectado automaticamente:
+                            </p>
                             <div class="pairing-code-display" id="pairingCodeText">---- - ---- - ----</div>
-                            <div class="refresh-timer">
-                                <span>⏱ Renovando código em <strong id="timerSeconds">15</strong>s</span>
+                            <div class="refresh-timer" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <span>⏱ Renovando código em <strong id="timerSeconds">30</strong>s</span>
+                                <button type="button" id="btnConfigHost" style="background: none; border: 1px solid #cbd5e1; border-radius: 6px; padding: 2px 8px; font-size: 0.75rem; color: #475569; cursor: pointer;">
+                                    ⚙️ IP Local
+                                </button>
                             </div>
+                            <div id="customHostDisplay" style="font-size: 0.7rem; color: #94a3b8; font-family: var(--font-mono);"></div>
                         </div>
                     </div>
 
