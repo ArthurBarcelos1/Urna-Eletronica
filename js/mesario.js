@@ -355,6 +355,25 @@ class MesarioController {
             }
         });
 
+        // Escuta o código de pareamento gerado pela Urna (atualiza a cada 30 segundos)
+        window.UrnaSync.on(`sessions/${this.sessionId}/active_pairing_code`, (pairData) => {
+            if (pairData && pairData.code) {
+                if (this.elements.mesarioPairingCode) {
+                    this.elements.mesarioPairingCode.textContent = pairData.code;
+                }
+                if (this.elements.mesarioTimerCount && pairData.timeLeft !== undefined) {
+                    this.elements.mesarioTimerCount.textContent = pairData.timeLeft;
+                }
+            }
+        });
+
+        // Escuta o cronômetro segundo a segundo do pareamento
+        window.UrnaSync.on(`sessions/${this.sessionId}/pairing_timer`, (timerData) => {
+            if (timerData && timerData.timeLeft !== undefined && this.elements.mesarioTimerCount) {
+                this.elements.mesarioTimerCount.textContent = timerData.timeLeft;
+            }
+        });
+
         // Monitor de Etapas da Votação em Tempo Real
         window.UrnaSync.on(`sessions/${this.sessionId}/current_step`, (stepData) => {
             if (!stepData) return;
