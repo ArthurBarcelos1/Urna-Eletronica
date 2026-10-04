@@ -1,24 +1,76 @@
-﻿"cargo","partido","nome","numero","foto"
-"deputado_federal","Partido Teste 13","Modelo Teste 01","1322",""
-"deputado_federal","Partido Teste 22","Modelo Teste 02","2210",""
-"deputado_federal","Partido Teste 45","Modelo Teste 03","4501",""
-"deputado_federal","Partido Teste 15","Modelo Teste 04","1515",""
-"deputado_federal","Partido Teste 50","Modelo Teste 05","5050",""
-"deputado_estadual","Partido Teste 13","Modelo Teste 01","13123",""
-"deputado_estadual","Partido Teste 22","Modelo Teste 02","22222",""
-"deputado_estadual","Partido Teste 45","Modelo Teste 03","45555",""
-"deputado_estadual","Partido Teste 15","Modelo Teste 04","15000",""
-"deputado_estadual","Partido Teste 55","Modelo Teste 05","55123",""
-"senador","Partido Teste 13","Modelo Teste 01","131",""
-"senador","Partido Teste 22","Modelo Teste 02","222",""
-"senador","Partido Teste 15","Modelo Teste 03","151",""
-"senador","Partido Teste 45","Modelo Teste 04","456",""
-"senador","Partido Teste 55","Modelo Teste 05","555",""
-"governador","Partido Teste 13","Modelo Teste 01","13",""
-"governador","Partido Teste 22","Modelo Teste 02","22",""
-"governador","Partido Teste 15","Modelo Teste 03","15",""
-"governador","Partido Teste 45","Modelo Teste 04","45",""
-"presidente","Partido Teste 13","Modelo Teste 01","13",""
-"presidente","Partido Teste 22","Modelo Teste 02","22",""
-"presidente","Partido Teste 15","Modelo Teste 03","15",""
-"presidente","Partido Teste 45","Modelo Teste 04","45",""
+﻿cargo,partido,nome,numero,foto
+deputado_federal,Partido dos Esportes,Boxe,9101,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/boxe.svg
+deputado_federal,Partido dos Esportes,Halterofilismo,9102,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/halterofilismo.svg
+deputado_federal,Partido dos Ritmos Musicais,Música Clássica,9201,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/musica_classica.svg
+deputado_federal,Partido dos Ritmos Musicais,Ópera,9202,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/opera.svg
+deputado_federal,Partido dos Ritmos Musicais,Jazz,9203,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/jazz.svg
+deputado_federal,Partido das Profissoes,Artista,9301,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/artista.svg
+deputado_federal,Partido das Profissoes,Operário,9302,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/operario.svg
+deputado_federal,Partido das Profissoes,Garçom,9303,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/garcom.svg
+deputado_federal,Partido das Festas Populares,Peão de Boiadeiro,9401,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/peao_de_boiadeiro.svg
+deputado_federal,Partido das Festas Populares,Semana Farroupilha,9402,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/semana_farroupilha.svg
+deputado_federal,Partido do Folclore,Negrinho do Pastoreio,9501,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/negrinho_do_pastoreio.svg
+deputado_federal,Partido do Folclore,Barba-Ruiva,9502,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/barba_ruiva.svg
+deputado_estadual,Partido dos Esportes,Atletismo,91001,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/atletismo.svg
+deputado_estadual,Partido dos Esportes,Rúgbi,91002,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/rugbi.svg
+deputado_estadual,Partido dos Esportes,Tênis,91003,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/tenis.svg
+deputado_estadual,Partido dos Ritmos Musicais,Frevo,92001,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/frevo.svg
+deputado_estadual,Partido dos Ritmos Musicais,Reggae,92002,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/reggae.svg
+deputado_estadual,Partido das Profissoes,Cozinheira,93001,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/cozinheira.svg
+deputado_estadual,Partido das Profissoes,Médica,93002,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/medica.svg
+deputado_estadual,Partido das Festas Populares,Folia de Reis,94001,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/folia_de_reis.svg
+deputado_estadual,Partido das Festas Populares,Boi-Bumbá,94002,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/boi_bumba.svg
+deputado_estadual,Partido das Festas Populares,Cavalhadas,94003,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/cavalhadas.svg
+deputado_estadual,Partido do Folclore,Iara,95001,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/iara.svg
+deputado_estadual,Partido do Folclore,Lobisomem,95002,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/lobisomem.svg
+deputado_estadual,Partido do Folclore,Mapinguari,95003,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/mapinguari.svg
+senador_1,Partido dos Esportes,Hipismo,911,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/hipismo.svg
+senador_1,Partido dos Esportes,Patinação,Primeiro Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/patinacao.svg
+senador_1,Partido dos Esportes,Esgrima,Segundo Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/esgrima.svg
+senador_1,Partido dos Ritmos Musicais,Música Eletrônica,921,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/musica_eletronica.svg
+senador_1,Partido dos Ritmos Musicais,Tango,Primeiro Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/tango.svg
+senador_1,Partido dos Ritmos Musicais,Música Disco,Segundo Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/musica_disco.svg
+senador_1,Partido das Profissoes,Motorista,931,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/motorista.svg
+senador_1,Partido das Profissoes,Fotógrafo,Primeiro Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/fotografo.svg
+senador_1,Partido das Profissoes,Gari,Segundo Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/gari.svg
+senador_1,Partido das Festas Populares,Lavagem do Bonfim,941,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/lavagem_do_bonfim.svg
+senador_1,Partido das Festas Populares,Festa da Uva,Primeiro Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/festa_da_uva.svg
+senador_1,Partido das Festas Populares,Dia das Bruxas,Segundo Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/dia_das_bruxas.svg
+senador_1,Partido do Folclore,Boitatá,951,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/boitata.svg
+senador_1,Partido do Folclore,Pisadeira,Primeiro Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/pisadeira.svg
+senador_1,Partido do Folclore,Matintapereira,Segundo Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/matinta_pereira.svg
+senador_2,Partido dos Esportes,Hipismo,911,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/hipismo.svg
+senador_2,Partido dos Esportes,Patinação,Primeiro Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/patinacao.svg
+senador_2,Partido dos Esportes,Esgrima,Segundo Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/esgrima.svg
+senador_2,Partido dos Ritmos Musicais,Música Eletrônica,921,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/musica_eletronica.svg
+senador_2,Partido dos Ritmos Musicais,Tango,Primeiro Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/tango.svg
+senador_2,Partido dos Ritmos Musicais,Música Disco,Segundo Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/musica_disco.svg
+senador_2,Partido das Profissoes,Motorista,931,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/motorista.svg
+senador_2,Partido das Profissoes,Fotógrafo,Primeiro Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/fotografo.svg
+senador_2,Partido das Profissoes,Gari,Segundo Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/gari.svg
+senador_2,Partido das Festas Populares,Lavagem do Bonfim,941,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/lavagem_do_bonfim.svg
+senador_2,Partido das Festas Populares,Festa da Uva,Primeiro Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/festa_da_uva.svg
+senador_2,Partido das Festas Populares,Dia das Bruxas,Segundo Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/dia_das_bruxas.svg
+senador_2,Partido do Folclore,Boitatá,951,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/boitata.svg
+senador_2,Partido do Folclore,Pisadeira,Primeiro Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/pisadeira.svg
+senador_2,Partido do Folclore,Matintapereira,Segundo Suplente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/matinta_pereira.svg
+governador,Partido dos Esportes,Vôlei,91,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/volei.svg
+governador,Partido dos Esportes,Basquete,Vice-Governador,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/basquete.svg
+governador,Partido dos Ritmos Musicais,Samba,92,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/samba.svg
+governador,Partido dos Ritmos Musicais,Mariachi,Vice-Governador,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/mariachi.svg
+governador,Partido das Profissoes,Professora,93,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/professora.svg
+governador,Partido das Profissoes,Mágico,Vice-Governador,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/magico.svg
+governador,Partido das Festas Populares,Carnaval,94,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/carnaval.svg
+governador,Partido das Festas Populares,Natal,Vice-Governador,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/natal.svg
+governador,Partido do Folclore,Saci-Pererê,95,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/saci.svg
+governador,Partido do Folclore,Caipora,Vice-Governador,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/caipora.svg
+presidente,Partido dos Esportes,Futebol,91,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/futebol.svg
+presidente,Partido dos Esportes,Polo Aquático,Vice-Presidente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/polo_aquatico.svg
+presidente,Partido dos Ritmos Musicais,Forró,92,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/forro.svg
+presidente,Partido dos Ritmos Musicais,Pagode,Vice-Presidente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/pagode.svg
+presidente,Partido das Profissoes,Bibliotecária,93,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/bibliotecaria.svg
+presidente,Partido das Profissoes,Aeromoça,Vice-Presidente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/aeromoca.svg
+presidente,Partido das Festas Populares,Dia da Independência do Brasil,94,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/dia_da_independencia_do_brasil.svg
+presidente,Partido das Festas Populares,Copa do Mundo,Vice-Presidente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/copa_do_mundo.svg
+presidente,Partido do Folclore,Vitória-Régia,95,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/vitoria_regia.svg
+presidente,Partido do Folclore,Bicho-Papão,Vice-Presidente,https://www.justicaeleitoral.jus.br/simulador-votacao/images/candidatos/bicho_papao.svg
