@@ -24,11 +24,43 @@ class UrnaAudio {
         }
     }
 
+    playAudioFile(filename, volume, onFallback, onComplete) {
+        if (typeof Audio === 'undefined') {
+            if (onFallback) onFallback();
+            else if (onComplete) onComplete();
+            return;
+        }
+
+        const audio = new Audio(`assets/sounds/${filename}`);
+        audio.volume = volume;
+        let fallbackStarted = false;
+        const fallback = () => {
+            if (fallbackStarted) return;
+            fallbackStarted = true;
+            if (onFallback) onFallback();
+            else if (onComplete) onComplete();
+        };
+
+        audio.addEventListener('error', fallback, { once: true });
+        audio.addEventListener('ended', () => {
+            if (!fallbackStarted && onComplete) onComplete();
+        }, { once: true });
+
+        const playback = audio.play();
+        if (playback && typeof playback.catch === 'function') {
+            playback.catch(fallback);
+        }
+    }
+
     /**
      * Bip curto de digitação de tecla (números, branco, corrige)
      */
     playKeyBeep() {
         if (!this.soundEnabled) return;
+        this.playAudioFile('confirm.mpeg', 1, () => this.playKeyBeepFallback());
+    }
+
+    playKeyBeepFallback() {
         this.initContext();
         if (!this.ctx) return;
 
@@ -55,6 +87,10 @@ class UrnaAudio {
      */
     playConfirmBeep() {
         if (!this.soundEnabled) return;
+        this.playAudioFile('confirm.mpeg', 0.5, () => this.playConfirmBeepFallback());
+    }
+
+    playConfirmBeepFallback() {
         this.initContext();
         if (!this.ctx) return;
 
@@ -65,7 +101,7 @@ class UrnaAudio {
         const gain1 = this.ctx.createGain();
         osc1.type = 'sine';
         osc1.frequency.setValueAtTime(1250, now);
-        gain1.gain.setValueAtTime(0.3, now);
+        gain1.gain.setValueAtTime(0.15, now);
         gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
         osc1.connect(gain1);
         gain1.connect(this.ctx.destination);
@@ -77,7 +113,7 @@ class UrnaAudio {
         const gain2 = this.ctx.createGain();
         osc2.type = 'sine';
         osc2.frequency.setValueAtTime(1875, now);
-        gain2.gain.setValueAtTime(0.15, now);
+        gain2.gain.setValueAtTime(0.075, now);
         gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
         osc2.connect(gain2);
         gain2.connect(this.ctx.destination);
@@ -117,6 +153,10 @@ class UrnaAudio {
             if (onComplete) onComplete();
             return;
         }
+        this.playAudioFile('finish.mpeg', 1, () => this.playPililiFallback(onComplete), onComplete);
+    }
+
+    playPililiFallback(onComplete) {
         this.initContext();
         if (!this.ctx) {
             if (onComplete) onComplete();

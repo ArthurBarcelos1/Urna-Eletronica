@@ -113,7 +113,12 @@ const PARTIDOS = {
     '45': { numero: '45', sigla: 'T45', nome: 'Partido Teste 45' },
     '50': { numero: '50', sigla: 'T50', nome: 'Partido Teste 50' },
     '55': { numero: '55', sigla: 'T55', nome: 'Partido Teste 55' },
-    '44': { numero: '44', sigla: 'T44', nome: 'Partido Teste 44' }
+    '44': { numero: '44', sigla: 'T44', nome: 'Partido Teste 44' },
+    '91': { numero: '91', sigla: 'T91', nome: 'Partido Teste 91' },
+    '92': { numero: '92', sigla: 'T92', nome: 'Partido Teste 92' },
+    '93': { numero: '93', sigla: 'T93', nome: 'Partido Teste 93' },
+    '94': { numero: '94', sigla: 'T94', nome: 'Partido Teste 94' },
+    '95': { numero: '95', sigla: 'T95', nome: 'Partido Teste 95' }
 };
 
 const CANDIDATOS_DATABASE = {
@@ -358,6 +363,43 @@ const CANDIDATOS_DATABASE = {
     ]
 };
 
+const FALLBACK_CANDIDATE_NUMBERS = {
+    deputado_federal: ['9101', '9102', '9201', '9202', '9203', '9301', '9302', '9303', '9401', '9402', '9501', '9502'],
+    deputado_estadual: ['91001', '91002', '91003', '92001', '92002', '93001', '93002', '94001', '94002', '94003', '95001', '95002', '95003'],
+    senador: ['911', '921', '931', '941', '951'],
+    governador: ['91', '92', '93', '94', '95'],
+    presidente: ['91', '92', '93', '94', '95']
+};
+
+function ensureFallbackCandidates(database) {
+    Object.entries(FALLBACK_CANDIDATE_NUMBERS).forEach(([cargo, numbers]) => {
+        numbers.forEach((numero, index) => {
+            let candidate = database[cargo][index];
+            if (!candidate) {
+                candidate = {
+                    numero,
+                    nome: '',
+                    partido: '',
+                    foto: generateCandidateAvatar('Modelo Teste')
+                };
+                if (cargo === 'senador') {
+                    candidate.suplente1 = { nome: '', foto: generateCandidateAvatar('Modelo Teste') };
+                    candidate.suplente2 = { nome: '', foto: generateCandidateAvatar('Modelo Teste') };
+                } else if (cargo === 'governador' || cargo === 'presidente') {
+                    candidate.vice = { nome: '', foto: generateCandidateAvatar('Modelo Teste') };
+                }
+                database[cargo].push(candidate);
+            }
+            candidate.numero = numero;
+            if (cargo === 'deputado_federal' || cargo === 'deputado_estadual') {
+                candidate.legendaNumero = numero.substring(0, 2);
+            }
+        });
+    });
+}
+
+ensureFallbackCandidates(CANDIDATOS_DATABASE);
+
 function applyTestModelNames(database) {
     let modelNumber = 0;
     Object.values(database).forEach(candidates => {
@@ -489,12 +531,14 @@ autoLoadCandidatosCSV();
 // Funções auxiliares de busca
 function findCandidato(cargoId, numero) {
     if (!numero) return null;
+    const normalizedNumber = String(numero).replace(/\D/g, '');
+    if (!normalizedNumber) return null;
     
     // Tratamento para senador (1ª e 2ª vaga usam a mesma lista)
     const dbKey = (cargoId === 'senador_1' || cargoId === 'senador_2') ? 'senador' : cargoId;
     const lista = CANDIDATOS_DATABASE[dbKey] || [];
     
-    return lista.find(c => c.numero === numero) || null;
+    return lista.find(c => String(c.numero).replace(/\D/g, '') === normalizedNumber) || null;
 }
 
 function findLegenda(cargoId, numeroLegenda) {
